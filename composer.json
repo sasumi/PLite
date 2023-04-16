@@ -1,0 +1,30 @@
+{
+	"name": "lfphp/plite",
+	"description": "php lite web framework",
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Lfphp\\Plite\\": "src/"
+		},
+		"files": [
+			"./src/app.php",
+			"./src/config.php",
+			"./src/function.php",
+			"./src/page.php",
+			"./src/router.php"
+		]
+	},
+	"authors": [
+		{
+			"name": "sasumi",
+			"email": "cnsasumi@gmail.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {
+		"lfphp/logger": "dev-master",
+		"ext-http": "*",
+		"ext-json": "*"
+	}
+}

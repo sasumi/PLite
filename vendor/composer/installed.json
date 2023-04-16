@@ -1,0 +1,146 @@
+{
+    "packages": [
+        {
+            "name": "lfphp/func",
+            "version": "1.1.32",
+            "version_normalized": "1.1.32.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sasumi/Func.git",
+                "reference": "7b0a74ab1edc8076d0205f071760fed6e9c36be5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/7b0a74ab1edc8076d0205f071760fed6e9c36be5",
+                "reference": "7b0a74ab1edc8076d0205f071760fed6e9c36be5",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-pdo": "*",
+                "ext-ssh2": "*",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "8.5.8"
+            },
+            "time": "2023-04-13T15:05:38+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/array.php",
+                    "src/color.php",
+                    "src/cron.php",
+                    "src/csp.php",
+                    "src/curl.php",
+                    "src/db.php",
+                    "src/env.php",
+                    "src/file.php",
+                    "src/font.php",
+                    "src/html.php",
+                    "src/http.php",
+                    "src/session.php",
+                    "src/sheet.php",
+                    "src/string.php",
+                    "src/time.php",
+                    "src/util.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sasumi.H",
+                    "email": "cnsasumi@outlook.com",
+                    "homepage": "http://blog.yikepi.com/"
+                }
+            ],
+            "description": "A lite function pack for PHP.",
+            "homepage": "http://blog.yikepi.com/",
+            "keywords": [
+                "function"
+            ],
+            "support": {
+                "issues": "https://github.com/sasumi/Func/issues",
+                "source": "https://github.com/sasumi/Func/tree/1.1.32"
+            },
+            "install-path": "../lfphp/func"
+        },
+        {
+            "name": "lfphp/logger",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sasumi/Logger.git",
+                "reference": "0eefc561c0640c2da6b281e8455093a5e449057e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sasumi/Logger/zipball/0eefc561c0640c2da6b281e8455093a5e449057e",
+                "reference": "0eefc561c0640c2da6b281e8455093a5e449057e",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "lfphp/func": "^1.1",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
+            },
+            "time": "2023-04-16T07:29:40+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "LFPhp\\Logger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sasumi.H",
+                    "email": "cnsasumi@outlook.com",
+                    "homepage": "http://blog.yikepi.com/"
+                }
+            ],
+            "description": "A lite logger for PHP. make log easier to use.",
+            "homepage": "http://blog.yikepi.com/",
+            "keywords": [
+                "lite",
+                "log",
+                "logger"
+            ],
+            "support": {
+                "issues": "https://github.com/sasumi/Logger/issues",
+                "source": "https://github.com/sasumi/Logger/tree/1.1.33"
+            },
+            "install-path": "../lfphp/logger"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
