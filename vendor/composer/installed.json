@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "1.1.32",
-            "version_normalized": "1.1.32.0",
+            "version": "1.1.33",
+            "version_normalized": "1.1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "7b0a74ab1edc8076d0205f071760fed6e9c36be5"
+                "reference": "990507b6ae8b49d1e8644512bbf32b804a03cfec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/7b0a74ab1edc8076d0205f071760fed6e9c36be5",
-                "reference": "7b0a74ab1edc8076d0205f071760fed6e9c36be5",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/990507b6ae8b49d1e8644512bbf32b804a03cfec",
+                "reference": "990507b6ae8b49d1e8644512bbf32b804a03cfec",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -32,7 +32,7 @@
             "require-dev": {
                 "phpunit/phpunit": "8.5.8"
             },
-            "time": "2023-04-13T15:05:38+00:00",
+            "time": "2023-04-28T09:57:44+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -73,7 +73,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/1.1.32"
+                "source": "https://github.com/sasumi/Func/tree/1.1.33"
             },
             "install-path": "../lfphp/func"
         },

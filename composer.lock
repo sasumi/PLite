@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f99777a1118b743c9482a2b1e2f8d2cf",
+    "content-hash": "9fbeb9f058aced7b0b38f62520751047",
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "1.1.32",
+            "version": "1.1.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "7b0a74ab1edc8076d0205f071760fed6e9c36be5"
+                "reference": "990507b6ae8b49d1e8644512bbf32b804a03cfec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/7b0a74ab1edc8076d0205f071760fed6e9c36be5",
-                "reference": "7b0a74ab1edc8076d0205f071760fed6e9c36be5",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/990507b6ae8b49d1e8644512bbf32b804a03cfec",
+                "reference": "990507b6ae8b49d1e8644512bbf32b804a03cfec",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -76,9 +76,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/1.1.32"
+                "source": "https://github.com/sasumi/Func/tree/1.1.33"
             },
-            "time": "2023-04-13T15:05:38+00:00"
+            "time": "2023-04-28T09:57:44+00:00"
         },
         {
             "name": "lfphp/logger",
@@ -149,7 +149,10 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-http": "*",
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }

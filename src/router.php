@@ -91,7 +91,7 @@ function call_route($route_item){
 				Logger::info(substr('Javascript Post '.str_replace(get_namespace($controller), '', $route_item), 0, 50), substr(json_encode($_POST, JSON_UNESCAPED_UNICODE), 0, 200));
 			}
 		}else{
-			$ctrl = get_class_without_ns($controller);
+			$ctrl = get_class_without_namespace($controller);
 			$tpl = strtolower("$ctrl/$action.php");
 			include_page($tpl, $ret);
 		}
