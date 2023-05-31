@@ -9,6 +9,7 @@ use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\get_namespace;
 use function LFPhp\Func\html_tag_hidden;
+use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_from_json_request;
 
 function url($path = '', $params = [], $force_exists = false){

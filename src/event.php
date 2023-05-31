@@ -2,15 +2,11 @@
 namespace Lfphp\Plite;
 const EVENT_BEFORE_APP_START = 'EVENT_BEFORE_APP_START';
 
-
-function fireEvent($event, ...$args){
-
+function fire_event($event, ...$args){
 }
 
-function registerEvent($event, $payload){
-
+function register_event($event, $payload){
 }
 
-function unregisterEvent($reg_id){
-
+function unregister_event($reg_id){
 }

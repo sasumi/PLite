@@ -41,6 +41,17 @@ function substr_utf8($string, $length, $tail = '...', &$over_length = false){
 }
 
 /**
+ * 检测字符串是否为JSON
+ * @param $str
+ * @return bool
+ */
+function is_json($str){
+	$tmp = json_decode($str);
+	unset($tmp);
+	return json_last_error() === JSON_ERROR_NONE;
+}
+
+/**
  * 按照指定边界字符列表，拆分字符串
  * @param array|string $delimiters eg: [',', '-'] or ",-"
  * @param string $str
@@ -548,6 +559,15 @@ function url_safe_b64decode($str){
 }
 
 /**
+ * 检测字符串是否符合 PHP 变量命名规则
+ * @param string $str
+ * @return false|string
+ */
+function check_php_var_name_legal($str){
+	return preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $str) ? $str : false;
+}
+
+/**
  * 文件名清洗（根据Windows标准）
  * @param string $filename
  * @return string|string[]
@@ -562,11 +582,12 @@ function filename_sanitize($filename){
 
 /**
  * 帕斯卡式转化成下划线格式
+ * (同时清理多个下划线连在一起的情况）
  * @param string $str
  * @return string
  */
 function pascalcase_to_underscores($str){
-	return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $str));
+	return preg_replace('/_+/', '_', strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $str)));
 }
 
 /**

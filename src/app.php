@@ -62,11 +62,3 @@ function start_web(){
 		include_page('5xx.php', ['exception' => $e]);
 	}
 }
-
-function context($config = null){
-	static $cfg;
-	if($config === null){
-		$cfg = $config;
-	}
-	return $cfg;
-}

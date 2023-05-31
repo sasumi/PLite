@@ -2,7 +2,6 @@
 	"name": "lfphp/plite",
 	"description": "php lite web framework",
 	"type": "library",
-	"license": "MIT",
 	"autoload": {
 		"psr-4": {
 			"Lfphp\\Plite\\": "src/"
@@ -10,6 +9,8 @@
 		"files": [
 			"./src/app.php",
 			"./src/config.php",
+			"./src/defines.php",
+			"./src/event.php",
 			"./src/function.php",
 			"./src/page.php",
 			"./src/router.php"
@@ -21,10 +22,8 @@
 			"email": "cnsasumi@gmail.com"
 		}
 	],
-	"minimum-stability": "dev",
 	"require": {
-		"lfphp/logger": "dev-master",
-		"ext-http": "*",
+		"lfphp/logger": "^1.1",
 		"ext-json": "*"
 	}
 }

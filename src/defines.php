@@ -1,5 +1,7 @@
 <?php
 
+namespace Lfphp\Plite;
+
 use Lfphp\Plite\Exception\PLiteException;
 
 if(!defined('APP_ROOT')){
@@ -14,4 +16,4 @@ if(!defined('APP_ROOT')){
 !defined('CONFIG_PATH') && define('CONFIG_PATH', APP_ROOT.'/config');
 
 //页面模板目录，提供给 include_page 函数使用
-!defined('TEMPLATE_PATH') && define('TEMPLATE_PATH', 'src/page');
+!defined('PAGE_PATH') && define('PAGE_PATH', 'src/page');
