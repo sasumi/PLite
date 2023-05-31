@@ -67,6 +67,14 @@ function start_web(){
 	}
 }
 
+function web_debug(){
+	foreach(FRAMEWORK_EVENT_LIST as $ev){
+		register_event($ev, function(...$args)use($ev){
+			Logger::instance(PLITE_ID)->info($ev, $args);
+		});
+	}
+}
+
 function set_app_env($app_env){
 	$_SERVER[SERVER_APP_ENV_KEY] = $app_env;
 }

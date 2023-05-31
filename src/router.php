@@ -8,8 +8,8 @@ use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\html_tag_hidden;
-use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_from_json_request;
+use function LFPhp\Func\http_redirect;
 
 /**
  * @param string $path
@@ -89,7 +89,6 @@ function call_route($route_item){
 	}
 
 	if(is_url($route_item)){
-		Logger::info('Req redirect', $route_item);
 		fire_event(EVENT_ROUTER_REDIRECT, $route_item);
 		http_redirect($route_item);
 		return;

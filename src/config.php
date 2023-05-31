@@ -6,8 +6,8 @@ namespace LFPhp\Plite;
  ***********************************/
 
 //应用根目录
-use function LFPhp\Func\array_get;
 use LFPhp\Plite\Exception\PLiteException as Exception;
+use function LFPhp\Func\array_get;
 
 /**
  * 获取配置值
@@ -21,7 +21,7 @@ function get_config($config_key_uri){
 		return $cache[$config_key_uri];
 	}
 	list($file, $path) = explode('/', $config_key_uri);
-	$config_file = CONFIG_PATH."/$file.php";
+	$config_file = CONFIG_PATH."/$file.inc.php";
 	if(!is_file($config_file)){
 		throw new Exception('Config file no found:'.$config_file);
 	}

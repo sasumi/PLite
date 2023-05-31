@@ -27,7 +27,6 @@ class ComposerStaticInit4ea527ae91325ef8f6fa2131a985da33
         '071990caedc05aeef2f061b42112188b' => __DIR__ . '/../..' . '/src/config.php',
         '0d0c4b096e0f4f0c8bc1dba4f71c079a' => __DIR__ . '/../..' . '/src/defines.php',
         'f5aea0560470b9a708e87ec2e1d1aeb4' => __DIR__ . '/../..' . '/src/event.php',
-        '65565e4654e0181fde890e2715dccf0e' => __DIR__ . '/../..' . '/src/function.php',
         '94295dad232e19183e6562b2fc414009' => __DIR__ . '/../..' . '/src/page.php',
         '184e0050df6a067784c7805ddbfe9649' => __DIR__ . '/../..' . '/src/router.php',
     );

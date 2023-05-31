@@ -26,7 +26,6 @@ return array(
     '071990caedc05aeef2f061b42112188b' => $baseDir . '/src/config.php',
     '0d0c4b096e0f4f0c8bc1dba4f71c079a' => $baseDir . '/src/defines.php',
     'f5aea0560470b9a708e87ec2e1d1aeb4' => $baseDir . '/src/event.php',
-    '65565e4654e0181fde890e2715dccf0e' => $baseDir . '/src/function.php',
     '94295dad232e19183e6562b2fc414009' => $baseDir . '/src/page.php',
     '184e0050df6a067784c7805ddbfe9649' => $baseDir . '/src/router.php',
 );
