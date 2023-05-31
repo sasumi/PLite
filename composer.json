@@ -24,6 +24,6 @@
 	"require": {
 		"php": ">=7.3",
 		"ext-json": "*",
-		"lfphp/logger": "^1.1"
+		"lfphp/func": "^1.1"
 	}
 }

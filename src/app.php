@@ -1,7 +1,6 @@
 <?php
 namespace LFPhp\Plite;
 
-use LFPhp\Logger\Logger;
 use LFPhp\Plite\Exception\PLiteException as Exception;
 use LFPhp\Plite\Exception\RouterException;
 use function LFPhp\Func\http_from_json_request;

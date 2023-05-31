@@ -3,7 +3,6 @@
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
-      <path value="$PROJECT_DIR$/vendor/lfphp/logger" />
       <path value="$PROJECT_DIR$/vendor/lfphp/func" />
     </include_path>
   </component>

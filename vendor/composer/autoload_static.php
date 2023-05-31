@@ -35,7 +35,6 @@ class ComposerStaticInit4ea527ae91325ef8f6fa2131a985da33
         'L' => 
         array (
             'LFPhp\\Plite\\' => 12,
-            'LFPhp\\Logger\\' => 13,
         ),
     );
 
@@ -43,10 +42,6 @@ class ComposerStaticInit4ea527ae91325ef8f6fa2131a985da33
         'LFPhp\\Plite\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
-        ),
-        'LFPhp\\Logger\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/lfphp/logger/src',
         ),
     );
 

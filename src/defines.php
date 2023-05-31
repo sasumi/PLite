@@ -28,10 +28,10 @@ if(!defined('APP_ROOT')){
 !defined('SERVER_APP_ENV_KEY') && define('SERVER_APP_ENV_KEY', 'APP_ENV');
 
 //404页面（传入 exception 变量）
-!defined('PAGE_NO_FOUND') && define('PAGE_NO_FOUND', '404.php');;
+!defined('PAGE_NO_FOUND') && define('PAGE_NO_FOUND', '404.php');
 
 //错误页面（传入 exception 变量）
-!defined('PAGE_ERROR') && define('PAGE_ERROR', '5xx.php');;
+!defined('PAGE_ERROR') && define('PAGE_ERROR', '5xx.php');
 
 //框架内置事件（可拓展）
 const EVENT_APP_START = 'EVENT_APP_START';
