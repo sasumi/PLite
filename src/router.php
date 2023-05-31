@@ -12,6 +12,13 @@ use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_from_json_request;
 
+/**
+ * @param string $path
+ * @param array $params
+ * @param false $force_exists
+ * @return string
+ * @throws \Lfphp\Plite\Exception\PLiteException
+ */
 function url($path = '', $params = [], $force_exists = false){
 	$routes = get_config('routes');
 	if(!isset($routes[$path]) && $force_exists){
@@ -120,6 +127,12 @@ function call_route($route_item){
 	throw new Exception('Router call fail:'.$route_item);
 }
 
+/**
+ * 成功
+ * @param $data
+ * @param string $msg
+ * @return array
+ */
 function pack_response_success($data, $msg = 'success'){
 	return [
 		'code' => 0,
@@ -128,6 +141,13 @@ function pack_response_success($data, $msg = 'success'){
 	];
 }
 
+/**
+ * 错误格式
+ * @param string $msg
+ * @param int $code
+ * @param null $data
+ * @return array
+ */
 function pack_response_error($msg = 'failed', $code = -1, $data = null){
 	return [
 		'code' => $code,

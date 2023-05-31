@@ -51,14 +51,24 @@ function start_web(){
 		}
 		throw new RouterException("Router no found");
 	}catch(RouterException $e){
+		Logger::warning($e->getMessage());
 		if(http_from_json_request()){
 			die(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
 		}
 		include_page('404.php', ['router_exception' => $e]);
 	}catch(Exception $e){
+		Logger::exception($e);
 		if(http_from_json_request()){
 			die(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
 		}
 		include_page('5xx.php', ['exception' => $e]);
 	}
+}
+
+function set_app_env($app_env){
+	$_SERVER[SERVER_APP_ENV_KEY] = $app_env;
+}
+
+function get_app_env(){
+	return $_SERVER[SERVER_APP_ENV_KEY];
 }

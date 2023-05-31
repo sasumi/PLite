@@ -1,7 +1,6 @@
 <?php
-
 namespace Lfphp\Plite\Exception;
 
-class RouterException extends \Exception {
+class RouterException extends PLiteException {
 
 }
