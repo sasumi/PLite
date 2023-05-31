@@ -7,7 +7,6 @@ use LFPhp\Plite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\get_class_without_namespace;
-use function LFPhp\Func\get_namespace;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_from_json_request;
@@ -26,11 +25,11 @@ function url($path = '', $params = [], $force_exists = false){
 	}
 	$params = array_clear_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
-	return SITE_ROOT."?r=$path".$ps;
+	return SITE_ROOT."?".ROUTER_KEY."=$path".$ps;
 }
 
-function url_input($path, $params = []){
-	$html = html_tag_hidden('r', $path);
+function url_input($uri, $params = []){
+	$html = html_tag_hidden(ROUTER_KEY, $uri);
 	$params = array_clear_null($params);
 	foreach($params as $k => $v){
 		$html .= html_tag_hidden($k, $v);
@@ -47,7 +46,7 @@ function url_replace($path, $params = []){
 }
 
 function url_hit($path){
-	$uri = ltrim($_SERVER['PATH_INFO'], '/');
+	$uri = ltrim($_SERVER["PATH_INFO"], '/');
 	return $uri == $path;
 }
 
@@ -56,7 +55,7 @@ function is_url($url){
 }
 
 function get_router(){
-	return $_GET['r'];
+	return $_GET[ROUTER_KEY];
 }
 
 function match_router($uri = ''){

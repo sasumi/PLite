@@ -15,6 +15,9 @@ if(!defined('APP_ROOT')){
 //配置目录，提供给 get_config 函数使用
 !defined('CONFIG_PATH') && define('CONFIG_PATH', APP_ROOT.'/config');
 
+//路由参数 key
+!defined('ROUTER_KEY') && define('ROUTER_KEY', 'r');
+
 //页面模板目录，提供给 include_page 函数使用
 !defined('PAGE_PATH') && define('PAGE_PATH', APP_ROOT.'src/page');
 

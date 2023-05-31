@@ -12,7 +12,7 @@ use function LFPhp\Func\http_from_json_request;
  */
 function start_web(){
 	try{
-		$req_route = $_GET['r'];
+		$req_route = $_GET[ROUTER_KEY];
 		$wildcard = '*';
 		$routes = get_config('routes');
 
