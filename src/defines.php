@@ -21,14 +21,26 @@ if(!defined('APP_ROOT')){
 //ENV KEY
 !defined('SERVER_APP_ENV_KEY') && define('SERVER_APP_ENV_KEY', 'APP_ENV');
 
-//本地环境
-const ENV_LOCAL = 'local';
+//404页面（传入 exception 变量）
+!defined('PAGE_NO_FOUND') && define('PAGE_NO_FOUND', PAGE_PATH.'/404.php');;
 
-//开发环境
-const ENV_DEVELOPMENT = 'development';
+//错误页面（传入 exception 变量）
+!defined('PAGE_ERROR') && define('PAGE_ERROR', PAGE_PATH.'/5xx.php');;
 
-//测试环境
-const ENV_TEST = 'development';
+//框架内置事件（可拓展）
+const EVENT_APP_START = 'EVENT_APP_START';
+const EVENT_APP_BEFORE_ACTION = 'EVENT_APP_BEFORE_ACTION';
+const EVENT_APP_AFTER_ACTION = 'EVENT_APP_AFTER_ACTION';
+const EVENT_APP_FINISHED = 'EVENT_APP_FINISHED';
+const EVENT_APP_EXCEPTION = 'EVENT_APP_EXCEPTION';
+const EVENT_ROUTER_REDIRECT = 'EVENT_ROUTER_REDIRECT';
+const EVENT_ROUTER_EXCEPTION = 'EVENT_ROUTER_EXCEPTION';
+const EVENT_APP_JSON_RESPONSE = 'EVENT_APP_JSON_RESPONSE';
+const EVENT_APP_BEFORE_INCLUDE_PAGE = 'EVENT_APP_BEFORE_INCLUDE_PAGE';
+const EVENT_APP_AFTER_INCLUDE_PAGE = 'EVENT_APP_AFTER_INCLUDE_PAGE';
 
-//生产环境
-const ENV_PRODUCTION = 'production';
+//框架内置环境定义（可拓展）
+const ENV_LOCAL = 'local';//本地环境
+const ENV_DEVELOPMENT = 'development';//开发环境
+const ENV_TEST = 'development';//测试环境
+const ENV_PRODUCTION = 'production';//生产环境

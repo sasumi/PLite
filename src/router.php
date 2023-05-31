@@ -91,6 +91,7 @@ function call_route($route_item){
 
 	if(is_url($route_item)){
 		Logger::info('Req redirect', $route_item);
+		fire_event(EVENT_ROUTER_REDIRECT, $route_item);
 		http_redirect($route_item);
 		return;
 	}
@@ -108,19 +109,19 @@ function call_route($route_item){
 		if($method->isStatic() || !$method->isPublic()){
 			throw new RouterException('Method no accessible:'.$action);
 		}
-		Logger::info("Controller Action called: {$controller_class}->{$action}()");
+		fire_event(EVENT_APP_BEFORE_ACTION, $controller_class, $action);
 		$controller = new $controller_class;
 		$ret = call_user_func([$controller, $action]);
+		fire_event(EVENT_APP_AFTER_ACTION, $controller_class, $action);
 		if(http_from_json_request()){
 			echo json_encode(pack_response_success($ret), JSON_UNESCAPED_UNICODE);
-			function_exists('fastcgi_finish_request') && fastcgi_finish_request();
-			if(in_array($_SERVER['REQUEST_METHOD'], ['POST', 'PUT', 'DELETE'])){
-				Logger::info(substr('Javascript Post '.str_replace(get_namespace($controller_class), '', $route_item), 0, 50), substr(json_encode($_POST, JSON_UNESCAPED_UNICODE), 0, 200));
-			}
+			fire_event(EVENT_APP_JSON_RESPONSE, $ret);
 		}else{
 			$ctrl = get_class_without_namespace($controller_class);
 			$tpl = strtolower("$ctrl/$action.php");
+			fire_event(EVENT_APP_BEFORE_INCLUDE_PAGE, $tpl);
 			include_page($tpl, $ret);
+			fire_event(EVENT_APP_AFTER_INCLUDE_PAGE, $tpl);
 		}
 		return true;
 	}
