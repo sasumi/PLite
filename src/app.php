@@ -11,7 +11,7 @@ use function LFPhp\Func\http_from_json_request;
  */
 function start_web(){
 	try{
-		$req_route = $_GET[ROUTER_KEY];
+		$req_route = $_GET[PLITE_ROUTER_KEY];
 		$wildcard = '*';
 		$routes = get_config('routes');
 
@@ -54,13 +54,13 @@ function start_web(){
 		if(http_from_json_request()){
 			die(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
 		}
-		include_page(PAGE_NO_FOUND, ['exception' => $e]);
+		include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
 	}catch(Exception $e){
 		fire_event(EVENT_APP_EXCEPTION, $e);
 		if(http_from_json_request()){
 			die(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
 		}
-		include_page(PAGE_ERROR, ['exception' => $e]);
+		include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
 	}finally{
 		fire_event(EVENT_APP_FINISHED);
 	}
@@ -76,9 +76,9 @@ function web_debug($payload){
 }
 
 function set_app_env($app_env){
-	$_SERVER[SERVER_APP_ENV_KEY] = $app_env;
+	$_SERVER[PLITE_SERVER_APP_ENV_KEY] = $app_env;
 }
 
 function get_app_env(){
-	return $_SERVER[SERVER_APP_ENV_KEY];
+	return $_SERVER[PLITE_SERVER_APP_ENV_KEY];
 }

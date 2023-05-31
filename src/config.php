@@ -21,7 +21,7 @@ function get_config($config_key_uri){
 		return $cache[$config_key_uri];
 	}
 	list($file, $path) = explode('/', $config_key_uri);
-	$config_file = CONFIG_PATH."/$file.inc.php";
+	$config_file = PLITE_CONFIG_PATH."/$file.inc.php";
 	if(!is_file($config_file)){
 		throw new Exception('Config file no found:'.$config_file);
 	}

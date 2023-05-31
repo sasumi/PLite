@@ -24,11 +24,11 @@ function url($path = '', $params = [], $force_exists = false){
 	}
 	$params = array_clear_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
-	return SITE_ROOT."?".ROUTER_KEY."=$path".$ps;
+	return PLITE_SITE_ROOT."?".PLITE_ROUTER_KEY."=$path".$ps;
 }
 
 function url_input($uri, $params = []){
-	$html = html_tag_hidden(ROUTER_KEY, $uri);
+	$html = html_tag_hidden(PLITE_ROUTER_KEY, $uri);
 	$params = array_clear_null($params);
 	foreach($params as $k => $v){
 		$html .= html_tag_hidden($k, $v);
@@ -54,7 +54,7 @@ function is_url($url){
 }
 
 function get_router(){
-	return $_GET[ROUTER_KEY];
+	return $_GET[PLITE_ROUTER_KEY];
 }
 
 function match_router($uri = ''){
