@@ -67,10 +67,11 @@ function start_web(){
 	}
 }
 
-function web_debug(){
+function web_debug($payload){
 	foreach(FRAMEWORK_EVENT_LIST as $ev){
-		register_event($ev, function(...$args)use($ev){
-			Logger::instance(PLITE_ID)->info($ev, $args);
+		register_event($ev, function(...$args)use($ev, $payload){
+			array_unshift($args, $ev);
+			call_user_func_array($payload, $args);
 		});
 	}
 }
