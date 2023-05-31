@@ -1,9 +1,9 @@
 <?php
-namespace Lfphp\Plite;
+namespace LFPhp\Plite;
 
 use LFPhp\Logger\Logger;
-use Lfphp\Plite\Exception\PLiteException as Exception;
-use Lfphp\Plite\Exception\RouterException;
+use LFPhp\Plite\Exception\PLiteException as Exception;
+use LFPhp\Plite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\get_class_without_namespace;
@@ -17,7 +17,7 @@ use function LFPhp\Func\http_from_json_request;
  * @param array $params
  * @param false $force_exists
  * @return string
- * @throws \Lfphp\Plite\Exception\PLiteException
+ * @throws \LFPhp\Plite\Exception\PLiteException
  */
 function url($path = '', $params = [], $force_exists = false){
 	$routes = get_config('routes');
@@ -82,7 +82,7 @@ function match_router($uri = ''){
 /**
  * @param string|callable $route_item 路由规则，支持格式：1、函数；2、Class@method \格式字符串；3、URL跳转字符串
  * @return bool|mixed|void
- * @throws \ReflectionException|\Lfphp\Plite\Exception\RouterException|\Lfphp\Plite\Exception\PLiteException
+ * @throws \ReflectionException|\LFPhp\Plite\Exception\RouterException|\LFPhp\Plite\Exception\PLiteException
  */
 function call_route($route_item){
 	if(is_callable($route_item)){

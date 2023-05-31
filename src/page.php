@@ -1,11 +1,11 @@
 <?php
-namespace Lfphp\Plite;
+namespace LFPhp\Plite;
 
-use Lfphp\Plite\Exception\PLiteException;
+use LFPhp\Plite\Exception\PLiteException;
 use function LFPhp\Func\assert_file_in_dir;
 
 /**
- * @throws \Lfphp\Plite\Exception\PLiteException
+ * @throws \LFPhp\Plite\Exception\PLiteException
  */
 function include_page($page_file, $params = [], $as_return = false){
 	$f = PAGE_PATH."/$page_file";

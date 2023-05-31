@@ -6,6 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Lfphp\\Plite\\' => array($baseDir . '/src'),
+    'LFPhp\\Plite\\' => array($baseDir . '/src'),
     'LFPhp\\Logger\\' => array($vendorDir . '/lfphp/logger/src'),
 );

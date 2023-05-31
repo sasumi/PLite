@@ -1,5 +1,5 @@
 <?php
-namespace Lfphp\Plite;
+namespace LFPhp\Plite;
 
 /************************************
  * 程序运行基础配置
@@ -7,7 +7,7 @@ namespace Lfphp\Plite;
 
 //应用根目录
 use function LFPhp\Func\array_get;
-use Lfphp\Plite\Exception\PLiteException as Exception;
+use LFPhp\Plite\Exception\PLiteException as Exception;
 
 /**
  * 获取配置值

@@ -35,13 +35,13 @@ class ComposerStaticInit4ea527ae91325ef8f6fa2131a985da33
     public static $prefixLengthsPsr4 = array (
         'L' => 
         array (
-            'Lfphp\\Plite\\' => 12,
+            'LFPhp\\Plite\\' => 12,
             'LFPhp\\Logger\\' => 13,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Lfphp\\Plite\\' => 
+        'LFPhp\\Plite\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

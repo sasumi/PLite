@@ -1,14 +1,14 @@
 <?php
-namespace Lfphp\Plite;
+namespace LFPhp\Plite;
 
 use LFPhp\Logger\Logger;
-use Lfphp\Plite\Exception\PLiteException as Exception;
-use Lfphp\Plite\Exception\RouterException;
+use LFPhp\Plite\Exception\PLiteException as Exception;
+use LFPhp\Plite\Exception\RouterException;
 use function LFPhp\Func\http_from_json_request;
 
 /**
  * @throws \ReflectionException
- * @throws \Lfphp\Plite\Exception\PLiteException
+ * @throws \LFPhp\Plite\Exception\PLiteException
  */
 function start_web(){
 	try{

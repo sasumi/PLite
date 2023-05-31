@@ -1,8 +1,8 @@
 <?php
 
-namespace Lfphp\Plite;
+namespace LFPhp\Plite;
 
-use Lfphp\Plite\Exception\PLiteException;
+use LFPhp\Plite\Exception\PLiteException;
 
 if(!defined('APP_ROOT')){
 	throw new PLiteException('APP_ROOT require to define');

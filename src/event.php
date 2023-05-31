@@ -1,5 +1,5 @@
 <?php
-namespace Lfphp\Plite;
+namespace LFPhp\Plite;
 
 use function LFPhp\Func\guid;
 
