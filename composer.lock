@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7735d2918cde6803aaef2ae7ba402354",
+    "content-hash": "1af8dcfcbea26864c1291e6d5f2f8a2a",
     "packages": [
         {
             "name": "lfphp/func",
@@ -134,7 +134,10 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.3",
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }
