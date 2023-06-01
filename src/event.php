@@ -10,7 +10,7 @@ class __EV_CACHE__ {
 }
 
 /**
- * 触发事件
+ * 触发事件（事件触发参数采用引用方式传参，支持修改）
  * @param string $event
  * @return bool|null 返回 true:命中处理逻辑，false:命中处理逻辑，且有中断行为，null:未命中
  * @throws \LFPhp\PLite\Exception\PLiteException
