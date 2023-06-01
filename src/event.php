@@ -2,6 +2,7 @@
 namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\PLiteException;
+use function LFPhp\Func\dump;
 use function LFPhp\Func\guid;
 
 //ev1 => [[$id, payload,break_after], ...]
@@ -17,8 +18,10 @@ class __EV_CACHE__ {
  */
 function fire_event($event, &$p1 = null, &$p2 = null, &$p3 = null, &$p4 = null, &$p5 = null, &$p6 = null){
 	$hit = null;
-	if(func_get_args() > 7){
-		throw new PLiteException('fire event arguments overload (limitation: 7)');
+	$arg_limit = 7;
+	$arg_count = func_num_args();
+	if($arg_count > $arg_limit){
+		throw new PLiteException("fire event arguments overload:$arg_count (limitation: $arg_limit)");
 	}
 	foreach(__EV_CACHE__::$event_map as $ev => $handle_list){
 		if($ev === $event){
