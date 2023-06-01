@@ -4,6 +4,7 @@ namespace LFPhp\PLite;
 use LFPhp\PLite\Exception\PLiteException as Exception;
 use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\http_from_json_request;
+use function LFPhp\Func\underscores_to_pascalcase;
 
 /**
  * @throws \ReflectionException
@@ -66,19 +67,66 @@ function start_web(){
 	}
 }
 
-function web_debug($payload){
-	foreach(FRAMEWORK_EVENT_LIST as $ev){
-		register_event($ev, function(...$args)use($ev, $payload){
-			array_unshift($args, $ev);
-			call_user_func_array($payload, $args);
-		});
-	}
-}
-
+/**
+ * 设置应用环境标志
+ * @param $app_env
+ */
 function set_app_env($app_env){
 	$_SERVER[PLITE_SERVER_APP_ENV_KEY] = $app_env;
 }
 
+/**
+ * 获取应用环境标识
+ * @return mixed
+ */
 function get_app_env(){
 	return $_SERVER[PLITE_SERVER_APP_ENV_KEY];
+}
+
+/**
+ * 获取应用变量命名
+ * @return string
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function get_app_var_name(){
+	$name = get_app_name();
+	$var_name = str_replace('/', '_', $name);
+	return underscores_to_pascalcase($var_name);
+}
+
+/**
+ * 获取应用命名空间
+ * @return string
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function get_app_namespace(){
+	$ns = get_app_name();
+	$ns = explode('/', $ns);
+	foreach($ns as $k=>$v){
+		$ns[$k] = ucfirst($v);
+	}
+	return join('\\', $ns);
+}
+
+/**
+ * 获取应用名称
+ * @return string
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function get_app_name(){
+	$data = get_app_composer_config();
+	return $data['name'];
+}
+
+/**
+ * 获取应用 composer 配置
+ * @return array
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function get_app_composer_config(){
+	$composer_json_file = PLITE_APP_ROOT.'/composer.json';
+	if(!is_file($composer_json_file)){
+		throw new Exception('composer json file no exists:'.$composer_json_file);
+	}
+	return json_decode(file_get_contents($composer_json_file), true);
 }
