@@ -1,6 +1,7 @@
 <?php
 namespace LFPhp\PLite;
 
+use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\PLiteException as Exception;
 use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\http_from_json_request;
@@ -50,18 +51,26 @@ function start_web(){
 			call_route($matched_route_item);
 		}
 		throw new RouterException("Router no found");
+	}catch(MessageException $e){
+		if(http_from_json_request()){
+			echo(json_encode(pack_response_error($e->getMessage(), $e->getCode()), JSON_UNESCAPED_UNICODE));
+		}else{
+			echo($e->getMessage());
+		}
 	}catch(RouterException $e){
 		fire_event(EVENT_ROUTER_EXCEPTION, $e);
 		if(http_from_json_request()){
-			die(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
+			echo(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
+		}else{
+			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
 		}
-		include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
 	}catch(Exception $e){
 		fire_event(EVENT_APP_EXCEPTION, $e);
 		if(http_from_json_request()){
-			die(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
+			echo(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
+		}else{
+			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
 		}
-		include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
 	}finally{
 		fire_event(EVENT_APP_FINISHED);
 	}
@@ -102,7 +111,7 @@ function get_app_var_name(){
 function get_app_namespace(){
 	$ns = get_app_name();
 	$ns = explode('/', $ns);
-	foreach($ns as $k=>$v){
+	foreach($ns as $k => $v){
 		$ns[$k] = ucfirst($v);
 	}
 	return join('\\', $ns);
