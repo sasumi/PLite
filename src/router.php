@@ -1,8 +1,8 @@
 <?php
-namespace LFPhp\Plite;
+namespace LFPhp\PLite;
 
-use LFPhp\Plite\Exception\PLiteException as Exception;
-use LFPhp\Plite\Exception\RouterException;
+use LFPhp\PLite\Exception\PLiteException as Exception;
+use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\get_class_without_namespace;
@@ -11,20 +11,22 @@ use function LFPhp\Func\http_from_json_request;
 use function LFPhp\Func\http_redirect;
 
 /**
- * @param string $path
+ * @param string $uri
  * @param array $params
  * @param false $force_exists
  * @return string
- * @throws \LFPhp\Plite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\PLiteException
  */
-function url($path = '', $params = [], $force_exists = false){
-	$routes = get_config('routes');
-	if(!isset($routes[$path]) && $force_exists){
-		throw new Exception('Router no found:'.$path);
+function url($uri = '', $params = [], $force_exists = false){
+	$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
+	if(!isset($routes[$uri]) && $force_exists){
+		throw new Exception('Router no found:'.$uri);
 	}
 	$params = array_clear_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
-	return PLITE_SITE_ROOT."?".PLITE_ROUTER_KEY."=$path".$ps;
+	$url = PLITE_SITE_ROOT."?".PLITE_ROUTER_KEY."=$uri".$ps;
+	fire_event(EVENT_ROUTER_URL, $url, $uri, $params);
+	return $url;
 }
 
 function url_input($uri, $params = []){
@@ -80,7 +82,7 @@ function match_router($uri = ''){
 /**
  * @param string|callable $route_item 路由规则，支持格式：1、函数；2、Class@method \格式字符串；3、URL跳转字符串
  * @return bool|mixed|void
- * @throws \ReflectionException|\LFPhp\Plite\Exception\RouterException|\LFPhp\Plite\Exception\PLiteException
+ * @throws \ReflectionException|\LFPhp\PLite\Exception\RouterException|\LFPhp\PLite\Exception\PLiteException
  */
 function call_route($route_item){
 	if(is_callable($route_item)){
@@ -116,9 +118,7 @@ function call_route($route_item){
 		}else{
 			$ctrl = get_class_without_namespace($controller_class);
 			$tpl = strtolower("$ctrl/$action.php");
-			fire_event(EVENT_APP_BEFORE_INCLUDE_PAGE, $tpl);
 			include_page($tpl, $ret);
-			fire_event(EVENT_APP_AFTER_INCLUDE_PAGE, $tpl);
 		}
 		return true;
 	}

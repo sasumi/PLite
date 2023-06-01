@@ -1,12 +1,12 @@
 <?php
-namespace LFPhp\Plite;
+namespace LFPhp\PLite;
 
 /************************************
  * 程序运行基础配置
  ***********************************/
 
 //应用根目录
-use LFPhp\Plite\Exception\PLiteException as Exception;
+use LFPhp\PLite\Exception\PLiteException as Exception;
 use function LFPhp\Func\array_get;
 
 /**

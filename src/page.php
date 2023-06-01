@@ -1,13 +1,14 @@
 <?php
-namespace LFPhp\Plite;
+namespace LFPhp\PLite;
 
-use LFPhp\Plite\Exception\PLiteException;
+use LFPhp\PLite\Exception\PLiteException;
 use function LFPhp\Func\assert_file_in_dir;
 
 /**
- * @throws \LFPhp\Plite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function include_page($page_file, $params = [], $as_return = false){
+	fire_event(EVENT_BEFORE_INCLUDE_PAGE, $page_file, $params);
 	$f = PLITE_PAGE_PATH."/$page_file";
 	if(!is_file($f)){
 		throw new PLiteException("Template no found($f)");
@@ -20,6 +21,7 @@ function include_page($page_file, $params = [], $as_return = false){
 		extract($params, EXTR_OVERWRITE);
 	}
 	include $f;
+	fire_event(EVENT_AFTER_INCLUDE_PAGE, $f, $params);
 	if($as_return){
 		$html = ob_get_contents();
 		ob_clean();

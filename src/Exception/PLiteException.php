@@ -1,6 +1,6 @@
 <?php
 
-namespace LFPhp\Plite\Exception;
+namespace LFPhp\PLite\Exception;
 
 class PLiteException extends \Exception {
 

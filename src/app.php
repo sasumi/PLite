@@ -1,19 +1,19 @@
 <?php
-namespace LFPhp\Plite;
+namespace LFPhp\PLite;
 
-use LFPhp\Plite\Exception\PLiteException as Exception;
-use LFPhp\Plite\Exception\RouterException;
+use LFPhp\PLite\Exception\PLiteException as Exception;
+use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\http_from_json_request;
 
 /**
  * @throws \ReflectionException
- * @throws \LFPhp\Plite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function start_web(){
 	try{
 		$req_route = $_GET[PLITE_ROUTER_KEY];
 		$wildcard = '*';
-		$routes = get_config('routes');
+		$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 
 		fire_event(EVENT_APP_START);
 
