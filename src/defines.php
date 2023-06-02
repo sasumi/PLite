@@ -23,6 +23,9 @@ if(!defined('PLITE_APP_ROOT')){
 //路由参数 key
 !defined('PLITE_ROUTER_CONFIG_FILE') && define('PLITE_ROUTER_CONFIG_FILE', 'routes');
 
+//静态资源版本配置文件
+!defined('PLITE_STATIC_VERSION_CONFIG_FILE') && define('PLITE_STATIC_VERSION_CONFIG_FILE', 'static_version');
+
 //页面模板目录，提供给 include_page 函数使用
 !defined('PLITE_PAGE_PATH') && define('PLITE_PAGE_PATH', PLITE_APP_ROOT.'/src/page');
 

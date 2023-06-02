@@ -3,6 +3,11 @@ namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\PLiteException;
 use function LFPhp\Func\assert_file_in_dir;
+use function LFPhp\Func\html_tag;
+use function LFPhp\Func\html_tag_css;
+use function LFPhp\Func\html_tag_js;
+use function LFPhp\Func\static_version_patch;
+use function LFPhp\Func\static_version_set;
 
 /**
  * @throws \LFPhp\PLite\Exception\PLiteException
@@ -28,4 +33,58 @@ function include_page($page_file, $params = [], $as_return = false){
 		return $html;
 	}
 	return null;
+}
+
+/**
+ * 引入js（同时打上版本号）
+ * @param string $js_src
+ * @param array $attr
+ * @throws \Exception
+ */
+function include_js($js_src, $attr = []){
+	echo html_tag_js(patch_resource_version($js_src), $attr);
+}
+
+/**
+ * 引入css（同时打上版本号）
+ * @param string $css_href
+ * @param array $attr
+ * @throws \Exception
+ */
+function include_css($css_href, $attr = []){
+	echo html_tag_css(patch_resource_version($css_href), $attr);
+}
+
+/**
+ * 引入图片（同时打上版本号）
+ * @param string $src
+ * @param array $attr
+ * @throws \Exception
+ */
+function include_img($src, $attr = []){
+	$attr['src'] = patch_resource_version($src);
+	echo html_tag('img', $attr);
+}
+
+/**
+ * 前端静态资源打版本号
+ * @param string $resource_file
+ * @return string
+ * @throws \Exception
+ */
+function patch_resource_version($resource_file){
+	static $init_result;
+	if(!isset($init_result)){
+		$configs = get_config(PLITE_STATIC_VERSION_CONFIG_FILE, true);
+		if($configs){
+			$init_result = true;
+			static_version_set($configs);
+		}else{
+			$init_result = false;
+		}
+	}
+	if($init_result){
+		$resource_file = static_version_patch($resource_file, $matched);
+	}
+	return $resource_file;
 }
