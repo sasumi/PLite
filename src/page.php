@@ -73,7 +73,7 @@ function include_img($src, $attr = []){
  * @throws \Exception
  */
 function patch_resource_version($resource_file){
-	static $init_result;
+	static $init_result = null;
 	if(!isset($init_result)){
 		$configs = get_config(PLITE_STATIC_VERSION_CONFIG_FILE, true);
 		if($configs){

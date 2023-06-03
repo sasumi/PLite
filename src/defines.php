@@ -24,6 +24,7 @@ if(!defined('PLITE_APP_ROOT')){
 !defined('PLITE_ROUTER_CONFIG_FILE') && define('PLITE_ROUTER_CONFIG_FILE', 'routes');
 
 //静态资源版本配置文件
+//静态资源配置规则请参考 README.md
 !defined('PLITE_STATIC_VERSION_CONFIG_FILE') && define('PLITE_STATIC_VERSION_CONFIG_FILE', 'static_version');
 
 //页面模板目录，提供给 include_page 函数使用
