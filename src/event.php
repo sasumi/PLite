@@ -2,7 +2,6 @@
 namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\PLiteException;
-use function LFPhp\Func\dump;
 use function LFPhp\Func\guid;
 
 //ev1 => [[$id, payload,break_after], ...]

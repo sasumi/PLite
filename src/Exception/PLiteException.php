@@ -2,6 +2,8 @@
 
 namespace LFPhp\PLite\Exception;
 
-class PLiteException extends \Exception {
+use Exception;
+
+class PLiteException extends Exception {
 
 }

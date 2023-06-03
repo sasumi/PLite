@@ -1,5 +1,5 @@
 <?php
-
+namespace Demo\Project;
 use function LFPhp\Func\dump;
 use function LFPhp\PLite\register_event;
 use function LFPhp\PLite\start_web;
