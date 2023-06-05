@@ -64,7 +64,7 @@ function start_web(){
 		}else{
 			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
 		}
-	}catch(Exception $e){
+	}catch(\Exception $e){
 		fire_event(EVENT_APP_EXCEPTION, $e);
 		if(http_from_json_request()){
 			echo(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
