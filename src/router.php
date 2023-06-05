@@ -113,8 +113,10 @@ function call_route($route_item){
 		$ret = call_user_func([$controller, $action]);
 		fire_event(EVENT_APP_AFTER_ACTION, $controller_class, $action);
 		if(http_from_json_request()){
-			echo json_encode(pack_response_success($ret), JSON_UNESCAPED_UNICODE);
-			fire_event(EVENT_APP_JSON_RESPONSE, $ret);
+			fire_event(EVENT_APP_BEFORE_JSON_RESPONSE, $ret);
+			$json_rsp = json_encode(pack_response_success($ret), JSON_UNESCAPED_UNICODE);
+			fire_event(EVENT_APP_AFTER_JSON_RESPONSE, $json_rsp);
+			echo $json_rsp;
 		}else{
 			$ctrl = get_class_without_namespace($controller_class);
 			$tpl = strtolower("$ctrl/$action.php");
