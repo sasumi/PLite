@@ -1,7 +1,7 @@
 <?php
 namespace LFPhp\PLite;
 
-use LFPhp\PLite\Exception\PLiteException as Exception;
+use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
@@ -16,11 +16,12 @@ use function LFPhp\Func\http_redirect;
  * @param false $force_exists
  * @return string
  * @throws \LFPhp\PLite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\RouterException
  */
 function url($uri = '', $params = [], $force_exists = false){
 	$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 	if(!isset($routes[$uri]) && $force_exists){
-		throw new Exception('Router no found:'.$uri);
+		throw new RouterException('Router no found:'.$uri);
 	}
 	$params = array_clear_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
@@ -82,7 +83,7 @@ function match_router($uri = ''){
 /**
  * @param string|callable $route_item 路由规则，支持格式：1、函数；2、Class@method \格式字符串；3、URL跳转字符串
  * @return bool|mixed|void
- * @throws \ReflectionException|\LFPhp\PLite\Exception\RouterException|\LFPhp\PLite\Exception\PLiteException
+ * @throws \ReflectionException|\LFPhp\PLite\Exception\RouterException|\LFPhp\PLite\Exception\PLiteException|\LFPhp\PLite\Exception\MessageException
  */
 function call_route($route_item){
 	if(is_callable($route_item)){
@@ -113,10 +114,7 @@ function call_route($route_item){
 		$ret = call_user_func([$controller, $action]);
 		fire_event(EVENT_APP_AFTER_ACTION, $controller_class, $action);
 		if(http_from_json_request()){
-			fire_event(EVENT_APP_BEFORE_JSON_RESPONSE, $ret);
-			$json_rsp = json_encode(pack_response_success($ret), JSON_UNESCAPED_UNICODE);
-			fire_event(EVENT_APP_AFTER_JSON_RESPONSE, $json_rsp);
-			echo $json_rsp;
+			throw new MessageException('success', PLITE_RSP_CODE_SUCCESS, $ret);
 		}else{
 			$ctrl = get_class_without_namespace($controller_class);
 			$tpl = strtolower("$ctrl/$action.php");
@@ -124,34 +122,37 @@ function call_route($route_item){
 		}
 		return true;
 	}
-	throw new Exception('Router call fail:'.$route_item);
+	throw new RouterException('Router call fail:'.$route_item);
 }
 
 /**
  * 成功
  * @param $data
- * @param string $msg
+ * @param string $message
  * @return array
  */
-function pack_response_success($data, $msg = 'success'){
-	return [
-		'code' => 0,
-		'msg'  => $msg,
-		'data' => $data,
-	];
+function pack_json_response_success($data, $message = 'success'){
+	return pack_json_response($message, PLITE_RSP_CODE_SUCCESS, $data);
 }
 
 /**
  * 错误格式
- * @param string $msg
+ * @param string $message
  * @param int $code
  * @param null $data
  * @return array
  */
-function pack_response_error($msg = 'failed', $code = -1, $data = null){
-	return [
-		'code' => $code,
-		'msg'  => $msg,
-		'data' => $data,
-	];
+function pack_json_response_error($message = 'failed', $code = PLITE_RSP_CODE_UNKNOWN_ERROR, $data = null){
+	return pack_json_response($message, $code, $data);
+}
+
+/**
+ * JSON 响应
+ * @param $message
+ * @param $code
+ * @param $data
+ * @return array
+ */
+function pack_json_response($message, $code, $data = null){
+	return compact('code', 'message', 'data');
 }

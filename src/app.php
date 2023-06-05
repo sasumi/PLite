@@ -51,29 +51,31 @@ function start_web(){
 			call_route($matched_route_item);
 		}
 		throw new RouterException("Router no found");
-	}catch(MessageException $e){
-		if(http_from_json_request()){
-			echo(json_encode(pack_response_error($e->getMessage(), $e->getCode()), JSON_UNESCAPED_UNICODE));
-		}else{
-			echo($e->getMessage());
-		}
-	}catch(RouterException $e){
-		fire_event(EVENT_ROUTER_EXCEPTION, $e);
-		if(http_from_json_request()){
-			echo(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
-		}else{
-			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
-		}
 	}catch(\Exception $e){
-		fire_event(EVENT_APP_EXCEPTION, $e);
-		if(http_from_json_request()){
-			echo(json_encode(pack_response_error($e->getMessage()), JSON_UNESCAPED_UNICODE));
-		}else{
-			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
-		}
+		auto_print_exception($e);
 	}finally{
 		fire_event(EVENT_APP_FINISHED);
 	}
+}
+
+function auto_print_exception(\Exception $e){
+	if(!http_from_json_request()){
+		if($e instanceof MessageException){
+			echo $e->getMessage();
+		}else if($e instanceof RouterException){
+			fire_event(EVENT_ROUTER_EXCEPTION, $e);
+			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
+		}else{
+			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
+			fire_event(EVENT_APP_EXCEPTION, $e);
+		}
+		return;
+	}
+	$rsp = $e instanceof MessageException ? $e->toArray() : pack_json_response($e->getMessage(), $e->getCode() ?: PLITE_RSP_CODE_UNKNOWN_ERROR);
+	fire_event(EVENT_APP_BEFORE_JSON_RESPONSE, $rsp);
+	$json_str = json_encode($rsp, JSON_UNESCAPED_UNICODE);
+	fire_event(EVENT_APP_AFTER_JSON_RESPONSE, $rsp, $json_str);
+	echo $json_str;
 }
 
 /**

@@ -23,6 +23,10 @@ if(!defined('PLITE_APP_ROOT')){
 //路由参数 key
 !defined('PLITE_ROUTER_CONFIG_FILE') && define('PLITE_ROUTER_CONFIG_FILE', 'routes');
 
+//JSON请求错误码
+!defined('PLITE_RSP_CODE_SUCCESS') && define('PLITE_RSP_CODE_SUCCESS', 0);
+!defined('PLITE_RSP_CODE_UNKNOWN_ERROR') && define('PLITE_RSP_CODE_UNKNOWN_ERROR', -1);
+
 //静态资源版本配置文件
 //静态资源配置规则请参考 README.md
 !defined('PLITE_STATIC_VERSION_CONFIG_FILE') && define('PLITE_STATIC_VERSION_CONFIG_FILE', 'static_version');
