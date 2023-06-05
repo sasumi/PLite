@@ -59,7 +59,7 @@ $admin_email = get_config('site/admin/email');
 
 ### 路由系统
 
-URL中默认参数名称为： `r` (可通过 `PLITE_ROUTER_KEY` 重置)。
+URL中默认参数名称为： `r` (可通过 `PLITE_ROUTER_KEY` 重置），缺省路由通过queryString方式传参。如：www.abc.com/?r=user/info&id=1。
 框架路由配置默认为：`routes.inc.php` (可以通过 `PLITE_ROUTER_CONFIG_FILE` 重置)。
 路由配置语法为：
 
