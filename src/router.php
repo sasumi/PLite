@@ -111,16 +111,7 @@ function call_route($route_item){
 		}
 		fire_event(EVENT_APP_BEFORE_ACTION, $controller_class, $action);
 		$controller = new $controller_class;
-		$ret = call_user_func([$controller, $action]);
-		fire_event(EVENT_APP_AFTER_ACTION, $controller_class, $action);
-		if(http_from_json_request()){
-			throw new MessageException('success', PLITE_RSP_CODE_SUCCESS, $ret);
-		}else{
-			$ctrl = get_class_without_namespace($controller_class);
-			$tpl = strtolower("$ctrl/$action.php");
-			include_page($tpl, $ret);
-		}
-		return true;
+		return call_user_func([$controller, $action]);
 	}
 	throw new RouterException('Router call fail:'.$route_item);
 }
