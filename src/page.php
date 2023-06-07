@@ -2,7 +2,7 @@
 namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\PLiteException;
-use function LFPhp\Func\assert_file_in_dir;
+use function LFPhp\Func\file_in_dir;
 use function LFPhp\Func\html_tag;
 use function LFPhp\Func\html_tag_css;
 use function LFPhp\Func\html_tag_js;
@@ -14,17 +14,16 @@ use function LFPhp\Func\static_version_set;
  */
 function include_page($page_file, $params = [], $as_return = false){
 	fire_event(EVENT_BEFORE_INCLUDE_PAGE, $page_file, $params);
-	$f = PLITE_PAGE_PATH."/$page_file";
-	if(!is_file($f)){
-		throw new PLiteException("Template no found($f)");
+	if(!page_exists($page_file)){
+		throw new PLiteException("Template no found($page_file)");
 	}
-	assert_file_in_dir($f, PLITE_PAGE_PATH);
 	if($as_return){
 		ob_start();
 	}
 	if($params && is_array($params)){
 		extract($params, EXTR_OVERWRITE);
 	}
+	$f = PLITE_PAGE_PATH."/$page_file";
 	include $f;
 	fire_event(EVENT_AFTER_INCLUDE_PAGE, $f, $params);
 	if($as_return){
@@ -33,6 +32,16 @@ function include_page($page_file, $params = [], $as_return = false){
 		return $html;
 	}
 	return null;
+}
+
+/**
+ * 检测视图文件是否存在
+ * @param string $page_file
+ * @return bool
+ */
+function page_exists($page_file){
+	$f = PLITE_PAGE_PATH.'/'.$page_file;
+	return is_file($f) && file_in_dir($f, PLITE_PAGE_PATH);
 }
 
 /**

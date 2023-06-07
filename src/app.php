@@ -1,80 +1,139 @@
 <?php
 namespace LFPhp\PLite;
 
+use Exception;
 use LFPhp\PLite\Exception\MessageException;
-use LFPhp\PLite\Exception\PLiteException as Exception;
+use LFPhp\PLite\Exception\PLiteException;
 use LFPhp\PLite\Exception\RouterException;
+use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\http_from_json_request;
+use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\underscores_to_pascalcase;
 
 /**
- * @throws \ReflectionException
- * @throws \LFPhp\PLite\Exception\PLiteException
+ * 开始运行web服务
  */
 function start_web(){
 	try{
-		$req_route = $_GET[PLITE_ROUTER_KEY];
-		$wildcard = '*';
-		$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
+		for(; ;){
+			$match_controller = null;
+			$match_action = null;
+			$req_route = $_GET[PLITE_ROUTER_KEY];
+			$wildcard = '*';
+			$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 
-		fire_event(EVENT_APP_START);
+			fire_event(EVENT_APP_START);
 
-		//fix json
-		if(http_from_json_request()){
-			$req_str = file_get_contents('php://input');
-			if($req_str){
-				$obj = @json_decode($req_str, true);
-				if(!json_last_error()){
-					foreach($obj as $k => $val){
-						$_POST[$k] = $val;
-						$_REQUEST[$k] = $val;
+			//fix json
+			if(http_from_json_request()){
+				$req_str = file_get_contents('php://input');
+				if($req_str){
+					$obj = @json_decode($req_str, true);
+					if(!json_last_error()){
+						foreach($obj as $k => $val){
+							$_POST[$k] = $val;
+							$_REQUEST[$k] = $val;
+						}
 					}
 				}
 			}
-		}
 
-		$matched_route_item = $routes[$req_route];
-		if(isset($matched_route_item)){
-			call_route($matched_route_item);
-			return;
-		}
-
-		//存在通配符规则
-		list($req_ctrl, $req_act) = explode('/', $req_route);
-		if($routes["$req_ctrl/$wildcard"]){
-			$matched_route_item = $routes["$req_ctrl/$wildcard"];
-			//命中规则存在通配符，则使用请求中的action
-			if(strpos($matched_route_item, $wildcard) !== false){
-				call_route(str_replace($wildcard, $req_act, $matched_route_item));
-				return;
+			$matched_route_item = $routes[$req_route];
+			if(isset($matched_route_item)){
+				$rsp_data = call_route($matched_route_item, $match_controller, $match_action);
+				break;
 			}
-			call_route($matched_route_item);
+
+			//存在通配符规则
+			list($req_ctrl, $req_act) = explode('/', $req_route);
+			if($routes["$req_ctrl/$wildcard"]){
+				$matched_route_item = $routes["$req_ctrl/$wildcard"];
+				//命中规则存在通配符，则使用请求中的action
+				if(strpos($matched_route_item, $wildcard) !== false){
+					$rsp_data = call_route(str_replace($wildcard, $req_act, $matched_route_item), $match_controller, $match_action);
+					break;
+				}
+				$rsp_data = call_route($matched_route_item, $match_controller, $match_action);
+				break;
+			}
+			throw new RouterException("Router no found");
 		}
-		throw new RouterException("Router no found");
-	}catch(\Exception $e){
-		auto_print_exception($e);
+		fire_event(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
+	}catch(Exception $e){
+		$r = fire_event(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
+		if($r !== EVENT_PAYLOAD_BREAK_NEXT){
+			throw $e; //未中断异常处理，直接继续往上抛
+		}
 	}finally{
 		fire_event(EVENT_APP_FINISHED);
 	}
 }
 
-function auto_print_exception(\Exception $e){
+/**
+ * 系统内置默认响应处理器
+ * 处理逻辑：
+ * 1、json请求，以json返回，
+ * 2、其他请求如果在路由配置里面是 Controller@Action 方式的话，尝试加载视图模板
+ * @param mixed|null $data
+ * @param string|null $controller
+ * @param string|null $action
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function default_response_handle($data = null, $controller = null, $action = null){
+	if(http_from_json_request()){
+		echo json_encode([
+			'data'    => $data,
+			'code'    => -1,
+			'message' => 'success',
+		], JSON_UNESCAPED_UNICODE);
+	}else if($controller && $action){
+		$ctrl = get_class_without_namespace($controller);
+		$tpl = strtolower("$ctrl/$action.php");
+		if(page_exists($tpl)){
+			include_page($tpl, $data);
+		}
+	}
+}
+
+/**
+ * 系统内置异常处理器
+ * 处理逻辑：
+ * 1、json请求，以json返回
+ * 2、MessageException 只输出 message
+ * 3、RouterException
+ * @param \Exception $e
+ * @return false|void
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function default_exception_handle(Exception $e){
 	if(!http_from_json_request()){
 		if($e instanceof MessageException){
+			if(page_exists(PLITE_PAGE_MESSAGE)){
+				include_page(PLITE_PAGE_MESSAGE, ['exception' => $e]);
+				return false;
+			}
+			if($forward_url = $e->getForwardUrl()){
+				http_redirect($forward_url);
+			}
 			echo $e->getMessage();
-		}else if($e instanceof RouterException){
-			fire_event(EVENT_ROUTER_EXCEPTION, $e);
-			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
-		}else{
-			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
-			fire_event(EVENT_APP_EXCEPTION, $e);
+			return false;
 		}
-		return;
+		if($e instanceof RouterException && page_exists(PLITE_PAGE_NO_FOUND)){
+			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
+			return false;
+		}
+		if(page_exists(PLITE_PAGE_ERROR)){
+			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
+			return false;
+		}
+		echo $e->getMessage();
+		return false;
 	}
-	$rsp = $e instanceof MessageException ? $e->toArray() : pack_json_response($e->getMessage(), $e->getCode() ?: PLITE_RSP_CODE_UNKNOWN_ERROR);
-	fire_event(EVENT_APP_BEFORE_JSON_RESPONSE, $rsp);
-	$json_str = json_encode($rsp, JSON_UNESCAPED_UNICODE);
-	fire_event(EVENT_APP_AFTER_JSON_RESPONSE, $rsp, $json_str);
+	$json_str = json_encode([
+		'code'    => $e->getCode(),
+		'message' => $e->getMessage(),
+		'data'    => $e instanceof MessageException ? $e->toArray() : null,
+	], JSON_UNESCAPED_UNICODE);
 	echo $json_str;
 }
 
@@ -137,7 +196,7 @@ function get_app_name(){
 function get_app_composer_config(){
 	$composer_json_file = PLITE_APP_ROOT.'/composer.json';
 	if(!is_file($composer_json_file)){
-		throw new Exception('composer json file no exists:'.$composer_json_file);
+		throw new PLiteException('composer json file no exists:'.$composer_json_file);
 	}
 	return json_decode(file_get_contents($composer_json_file), true);
 }
