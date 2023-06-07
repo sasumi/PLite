@@ -42,7 +42,7 @@ if(!defined('PLITE_APP_ROOT')){
 //错误页面（传入 exception 变量）
 !defined('PLITE_PAGE_ERROR') && define('PLITE_PAGE_ERROR', '5xx.php');
 
-//框架内置事件（可拓展）
+//框架内置事件
 const EVENT_APP_START = 'EVENT_APP_START';
 const EVENT_APP_BEFORE_EXEC = 'EVENT_APP_BEFORE_EXEC';
 const EVENT_APP_EXECUTED = 'EVENT_APP_EXECUTED';

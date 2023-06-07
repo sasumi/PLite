@@ -21,7 +21,9 @@ function get_config($config_key_uri, $ignore_on_file_no_exists = false){
 	if(isset($cache[$config_key_uri])){
 		return $cache[$config_key_uri];
 	}
-	list($file, $path) = explode('/', $config_key_uri);
+	$path = explode('/', $config_key_uri);
+	$file = array_shift($path);
+
 	$config_file = PLITE_CONFIG_PATH."/$file.inc.php";
 	if(!is_file($config_file)){
 		if(!$ignore_on_file_no_exists){
@@ -34,6 +36,6 @@ function get_config($config_key_uri, $ignore_on_file_no_exists = false){
 	if(!isset($config_file)){
 		throw new Exception("Config content empty in file:".$config_file);
 	}
-	$cache[$config_key_uri] = array_get($config, $path, null, '/');
+	$cache[$config_key_uri] = array_get($config, join('/', $path), null, '/');
 	return $cache[$config_key_uri];
 }

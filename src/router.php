@@ -16,9 +16,12 @@ use function LFPhp\Func\http_redirect;
  * @throws \LFPhp\PLite\Exception\RouterException
  */
 function url($uri = '', $params = [], $force_exists = false){
-	$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
-	if(!isset($routes[$uri]) && $force_exists){
-		throw new RouterException('Router no found:'.$uri);
+	if($force_exists){
+		//todo 这里缺少通配符比较
+		$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
+		if(!isset($routes[$uri])){
+			throw new RouterException('Router no found:'.$uri);
+		}
 	}
 	$params = array_clear_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
