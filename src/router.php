@@ -1,13 +1,10 @@
 <?php
 namespace LFPhp\PLite;
 
-use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
-use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\html_tag_hidden;
-use function LFPhp\Func\http_from_json_request;
 use function LFPhp\Func\http_redirect;
 
 /**
@@ -82,68 +79,38 @@ function match_router($uri = ''){
 
 /**
  * @param string|callable $route_item 路由规则，支持格式：1、函数；2、Class@method \格式字符串；3、URL跳转字符串
+ * @param null $match_controller
+ * @param null $match_action
  * @return bool|mixed|void
- * @throws \ReflectionException|\LFPhp\PLite\Exception\RouterException|\LFPhp\PLite\Exception\PLiteException|\LFPhp\PLite\Exception\MessageException
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\RouterException
+ * @throws \ReflectionException
  */
-function call_route($route_item){
+function call_route($route_item, &$match_controller = null, &$match_action = null){
+	fire_event(EVENT_ROUTER_HIT, $route_item);
 	if(is_callable($route_item)){
 		return call_user_func($route_item);
 	}
-
 	if(is_url($route_item)){
-		fire_event(EVENT_ROUTER_REDIRECT, $route_item);
 		http_redirect($route_item);
 		return;
 	}
-
 	if(is_string($route_item) && strpos($route_item, '@')){
-		list($controller_class, $action) = explode('@', $route_item);
-		if(!class_exists($controller_class)){
+		list($match_controller, $match_action) = explode('@', $route_item);
+		if(!class_exists($match_controller)){
 			throw new RouterException("Router no found PageID:$route_item");
 		}
-		if(!method_exists($controller_class, $action)){
+		if(!method_exists($match_controller, $match_action)){
 			throw new RouterException('Action no found PageID:'.$route_item);
 		}
-		$rc = new ReflectionClass($controller_class);
-		$method = $rc->getMethod($action);
+		$rc = new ReflectionClass($match_controller);
+		$method = $rc->getMethod($match_action);
 		if($method->isStatic() || !$method->isPublic()){
-			throw new RouterException('Method no accessible:'.$action);
+			throw new RouterException('Method no accessible:'.$match_action);
 		}
-		fire_event(EVENT_APP_BEFORE_ACTION, $controller_class, $action);
-		$controller = new $controller_class;
-		return call_user_func([$controller, $action]);
+		fire_event(EVENT_APP_BEFORE_EXEC, $match_controller, $match_action);
+		$controller = new $match_controller;
+		return call_user_func([$controller, $match_action]);
 	}
 	throw new RouterException('Router call fail:'.$route_item);
-}
-
-/**
- * 成功
- * @param $data
- * @param string $message
- * @return array
- */
-function pack_json_response_success($data, $message = 'success'){
-	return pack_json_response($message, PLITE_RSP_CODE_SUCCESS, $data);
-}
-
-/**
- * 错误格式
- * @param string $message
- * @param int $code
- * @param null $data
- * @return array
- */
-function pack_json_response_error($message = 'failed', $code = PLITE_RSP_CODE_UNKNOWN_ERROR, $data = null){
-	return pack_json_response($message, $code, $data);
-}
-
-/**
- * JSON 响应
- * @param $message
- * @param $code
- * @param $data
- * @return array
- */
-function pack_json_response($message, $code, $data = null){
-	return compact('code', 'message', 'data');
 }

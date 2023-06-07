@@ -9,16 +9,17 @@ class MessageException extends PLiteException implements JsonSerializable {
 	public $data;
 	public $forward_url;
 
-	public function __construct($message = "", $code = PLITE_RSP_CODE_UNKNOWN_ERROR, $data = null, $forward_url = '', Throwable $previous = null){
+	public function __construct($message = "", $code = null, $data = null, $forward_url = '', Throwable $previous = null){
 		parent::__construct($message, $code, $previous);
 		$this->data = $data;
+		$this->forward_url = $forward_url;
 	}
 
 	public static function successData($data, $message = 'success'){
-		return new self($message, PLITE_RSP_CODE_SUCCESS, $data);
+		return new self($message, null, $data);
 	}
 
-	public static function errorMessage($message, $code = PLITE_RSP_CODE_UNKNOWN_ERROR, $data = null){
+	public static function errorMessage($message, $code = null, $data = null){
 		return new self($message, $code, $data);
 	}
 
