@@ -4,7 +4,6 @@ namespace LFPhp\PLite;
 use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
-use function LFPhp\Func\dump;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 
@@ -88,7 +87,6 @@ function match_router($uri = ''){
  * @return bool|mixed|void
  * @throws \LFPhp\PLite\Exception\PLiteException
  * @throws \LFPhp\PLite\Exception\RouterException
- * @throws \ReflectionException
  */
 function call_route($route_item, &$match_controller = null, &$match_action = null){
 	fire_event(EVENT_ROUTER_HIT, $route_item);
@@ -107,7 +105,6 @@ function call_route($route_item, &$match_controller = null, &$match_action = nul
 		//是否存在 __call 方法
 		$call_method_exists = method_exists($match_controller, '__call');
 		if(!method_exists($match_controller, $match_action) && !$call_method_exists){
-			dump($match_controller, method_exists($match_controller, '__get'), 1);
 			throw new RouterException('Action no found PageID:'.$route_item);
 		}
 		$rc = new ReflectionClass($match_controller);
