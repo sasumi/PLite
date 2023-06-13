@@ -4,6 +4,7 @@ namespace LFPhp\PLite;
 use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
+use function LFPhp\Func\dump;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 
@@ -103,13 +104,22 @@ function call_route($route_item, &$match_controller = null, &$match_action = nul
 		if(!class_exists($match_controller)){
 			throw new RouterException("Router no found PageID:$route_item");
 		}
-		if(!method_exists($match_controller, $match_action)){
+		//是否存在 __call 方法
+		$call_method_exists = method_exists($match_controller, '__call');
+		if(!method_exists($match_controller, $match_action) && !$call_method_exists){
+			dump($match_controller, method_exists($match_controller, '__get'), 1);
 			throw new RouterException('Action no found PageID:'.$route_item);
 		}
 		$rc = new ReflectionClass($match_controller);
-		$method = $rc->getMethod($match_action);
-		if($method->isStatic() || !$method->isPublic()){
-			throw new RouterException('Method no accessible:'.$match_action);
+
+		if(!$call_method_exists){
+			if(!$rc->hasMethod($match_action)){
+				throw new RouterException('Router no found');
+			}
+			$method = $rc->getMethod($match_action);
+			if($method->isStatic() || !$method->isPublic()){
+				throw new RouterException('Method no accessible:'.$match_action);
+			}
 		}
 		fire_event(EVENT_APP_BEFORE_EXEC, $match_controller, $match_action);
 		$controller = new $match_controller;

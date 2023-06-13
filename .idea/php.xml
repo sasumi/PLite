@@ -6,5 +6,7 @@
       <path value="$PROJECT_DIR$/vendor/lfphp/func" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.1">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
 </project>
