@@ -7,6 +7,7 @@ use LFPhp\PLite\Exception\PLiteException;
 use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\http_from_json_request;
+use function LFPhp\Func\http_header_json_response;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\underscores_to_pascalcase;
 
@@ -81,9 +82,10 @@ function start_web(){
  */
 function default_response_handle($data = null, $controller = null, $action = null){
 	if(http_from_json_request()){
+		http_header_json_response();
 		echo json_encode([
 			'data'    => $data,
-			'code'    => -1,
+			'code'    => MessageException::$CODE_DEFAULT_SUCCESS,
 			'message' => 'success',
 		], JSON_UNESCAPED_UNICODE);
 	}else if($controller && $action){
@@ -129,6 +131,7 @@ function default_exception_handle(Exception $e){
 		echo $e->getMessage();
 		return false;
 	}
+	http_header_json_response();
 	$json_str = json_encode([
 		'code'    => $e->getCode(),
 		'message' => $e->getMessage(),

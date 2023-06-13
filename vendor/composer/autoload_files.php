@@ -22,6 +22,7 @@ return array(
     '9fd272e63096bdfab6672831e2fc7fd4' => $vendorDir . '/lfphp/func/src/string.php',
     '38d93b268ce45d4c48e6ed3d8634fb00' => $vendorDir . '/lfphp/func/src/time.php',
     '852afe357795df2e7329c111d2e8b564' => $vendorDir . '/lfphp/func/src/util.php',
+    '82c048fa4c516ae6b9f300f715cdb262' => $baseDir . '/script/scaffold.php',
     'c3c106f3aac32d5bbdf38f4dc7302aed' => $baseDir . '/src/app.php',
     '071990caedc05aeef2f061b42112188b' => $baseDir . '/src/config.php',
     '0d0c4b096e0f4f0c8bc1dba4f71c079a' => $baseDir . '/src/defines.php',

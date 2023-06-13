@@ -23,6 +23,7 @@ class ComposerStaticInit4ea527ae91325ef8f6fa2131a985da33
         '9fd272e63096bdfab6672831e2fc7fd4' => __DIR__ . '/..' . '/lfphp/func/src/string.php',
         '38d93b268ce45d4c48e6ed3d8634fb00' => __DIR__ . '/..' . '/lfphp/func/src/time.php',
         '852afe357795df2e7329c111d2e8b564' => __DIR__ . '/..' . '/lfphp/func/src/util.php',
+        '82c048fa4c516ae6b9f300f715cdb262' => __DIR__ . '/../..' . '/script/scaffold.php',
         'c3c106f3aac32d5bbdf38f4dc7302aed' => __DIR__ . '/../..' . '/src/app.php',
         '071990caedc05aeef2f061b42112188b' => __DIR__ . '/../..' . '/src/config.php',
         '0d0c4b096e0f4f0c8bc1dba4f71c079a' => __DIR__ . '/../..' . '/src/defines.php',
@@ -34,12 +35,12 @@ class ComposerStaticInit4ea527ae91325ef8f6fa2131a985da33
     public static $prefixLengthsPsr4 = array (
         'L' => 
         array (
-            'LFPhp\\Plite\\' => 12,
+            'LFPhp\\PLite\\' => 12,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'LFPhp\\Plite\\' => 
+        'LFPhp\\PLite\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
