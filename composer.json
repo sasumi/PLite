@@ -23,7 +23,6 @@
 		}
 	],
 	"require": {
-		"php": ">=7.3",
 		"ext-json": "*",
 		"lfphp/func": "^1.1"
 	}
