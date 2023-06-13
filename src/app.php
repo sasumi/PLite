@@ -133,7 +133,7 @@ function default_exception_handle(Exception $e){
 	}
 	http_header_json_response();
 	$json_str = json_encode([
-		'code'    => $e->getCode(),
+		'code'    => $e->getCode() ?: MessageException::$CODE_DEFAULT_ERROR, //避免一般exception code = 0 情况
 		'message' => $e->getMessage(),
 		'data'    => $e instanceof MessageException ? $e->toArray() : null,
 	], JSON_UNESCAPED_UNICODE);
