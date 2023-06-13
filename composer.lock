@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "1.1.40",
+            "version": "1.1.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "c01903cf8e9a247b58c6763fa78e31c2e76de91a"
+                "reference": "516b5b633c82193a65076c948ddf12f8c228b10b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/c01903cf8e9a247b58c6763fa78e31c2e76de91a",
-                "reference": "c01903cf8e9a247b58c6763fa78e31c2e76de91a",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/516b5b633c82193a65076c948ddf12f8c228b10b",
+                "reference": "516b5b633c82193a65076c948ddf12f8c228b10b",
                 "shasum": ""
             },
             "require": {
@@ -28,8 +28,7 @@
                 "php": ">=5.6"
             },
             "require-dev": {
-                "ext-ssh2": "*",
-                "phpunit/phpunit": "8.5.8"
+                "ext-ssh2": "*"
             },
             "type": "library",
             "autoload": {
@@ -70,9 +69,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/1.1.40"
+                "source": "https://github.com/sasumi/Func/tree/1.1.41"
             },
-            "time": "2023-06-13T02:52:24+00:00"
+            "time": "2023-06-13T06:21:30+00:00"
         }
     ],
     "packages-dev": [],
