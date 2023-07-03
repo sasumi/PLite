@@ -3,7 +3,7 @@
         'name' => 'lfphp/plite',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '40ca53157d206a4aa5c8b45a2aeb61f42b420ec0',
+        'reference' => '0b340da8d95a3eb3d7db314fedac15a3064e46a8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'lfphp/func' => array(
-            'pretty_version' => '1.1.41',
-            'version' => '1.1.41.0',
-            'reference' => '516b5b633c82193a65076c948ddf12f8c228b10b',
+            'pretty_version' => '1.1.46',
+            'version' => '1.1.46.0',
+            'reference' => 'e7a82f55133dcd3f1916512fdcbaed40d989224d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../lfphp/func',
             'aliases' => array(),
@@ -22,7 +22,7 @@
         'lfphp/plite' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '40ca53157d206a4aa5c8b45a2aeb61f42b420ec0',
+            'reference' => '0b340da8d95a3eb3d7db314fedac15a3064e46a8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

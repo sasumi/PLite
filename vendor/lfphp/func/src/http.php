@@ -25,6 +25,34 @@ function http_send_status($status){
 }
 
 /**
+ * 返回跨域CORS头信息
+ * @param string[] $allow_hosts 允许通过的域名列表，为空表示允许所有来源域名
+ * @param string $http_origin 来源请求，格式为：http://www.abc.com，缺省从 HTTP_ORIGIN 或 HTTP_REFERER获取
+ * @return bool 是否设置成功
+ */
+function http_send_cors($allow_hosts = [], $http_origin = null){
+	$http_origin = $http_origin ?: $_SERVER['HTTP_ORIGIN'] ?: $_SERVER['HTTP_REFERER'];
+	if(!$http_origin){
+		return false;
+	}
+
+	$ret = parse_url($http_origin);
+	$request_host = $ret['host'];
+	$http_scheme = $ret['scheme'];
+
+	if($allow_hosts && !in_array(strtolower($request_host), array_map('strtolower', $allow_hosts))){
+		return false;
+	}
+	if(headers_sent()){
+		return false;
+	}
+	header("Access-Control-Allow-Origin: $http_scheme://$request_host");
+	header('Access-Control-Allow-Credentials: true');
+	header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+	return true;
+}
+
+/**
  * 发送 HTTP 头部字符集
  * @param string $charset
  * @return bool 是否成功
@@ -95,7 +123,7 @@ function http_get_status_message($status){
  * @param bool $permanently 是否为长期资源重定向
  */
 function http_redirect($url, $permanently = false){
-	http_send_status($permanently ? 301: 302);
+	http_send_status($permanently ? 301 : 302);
 	header('Location:'.$url);
 }
 
@@ -134,7 +162,7 @@ function http_get_request_headers(){
  */
 function http_get_request_header($key){
 	$headers = http_get_request_headers();
-	foreach($headers as $k=>$val){
+	foreach($headers as $k => $val){
 		if(strcasecmp($k, $key) === 0){
 			return $val;
 		}
@@ -143,11 +171,19 @@ function http_get_request_header($key){
 }
 
 /**
- * 判断 HTTP 请求是否包含 JSON定义
+ * 判断请求方式是否为 JSON 方式
  * @return bool
  */
 function http_from_json_request(){
 	return http_get_request_header('Content-Type') == 'application/json';
+}
+
+/**
+ * 判断请求接受格式是否为 JSON
+ * @return bool
+ */
+function http_request_accept_json(){
+	return http_get_request_header('Accept') == 'application/json';
 }
 
 /**
@@ -189,6 +225,17 @@ function http_header_json_response($charset = 'utf-8'){
 }
 
 /**
+ * 响应json数据
+ * @param mixed $json
+ * @param int $json_option
+ * @return void
+ */
+function http_json_response($json, $json_option = JSON_UNESCAPED_UNICODE){
+	http_header_json_response();
+	echo json_encode($json, $json_option);
+}
+
+/**
  * 发送文件下载头信息
  * @param string $download_name
  * @param string $disposition
@@ -209,6 +256,7 @@ function http_header_download($download_name = '', $disposition = 'attachment'){
  * @param string[] $csp_rules 建议使用csp_content_rule()方法产生的规则
  * @param string $report_uri
  * @param bool $report_only
+ * @throws \Exception
  */
 function http_header_csp(array $csp_rules, $report_uri = '', $report_only = false){
 	if($report_only && !$report_uri){
