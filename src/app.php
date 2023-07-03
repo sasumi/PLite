@@ -8,7 +8,9 @@ use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\http_from_json_request;
 use function LFPhp\Func\http_header_json_response;
+use function LFPhp\Func\http_json_response;
 use function LFPhp\Func\http_redirect;
+use function LFPhp\Func\http_request_accept_json;
 use function LFPhp\Func\underscores_to_pascalcase;
 
 /**
@@ -81,14 +83,17 @@ function start_web(){
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_response_handle($data = null, $controller = null, $action = null){
-	if(http_from_json_request()){
-		http_header_json_response();
-		echo json_encode([
+	if(http_request_accept_json()){
+		http_json_response([
 			'data'    => $data,
 			'code'    => MessageException::$CODE_DEFAULT_SUCCESS,
-			'message' => 'success',
-		], JSON_UNESCAPED_UNICODE);
-	}else if($controller && $action){
+			'message' => '成功',
+		]);
+		return;
+	}
+
+	//自动模板
+	if($controller && $action){
 		$ctrl = get_class_without_namespace($controller);
 		$tpl = strtolower("$ctrl/$action.php");
 		if(page_exists($tpl)){
@@ -100,15 +105,16 @@ function default_response_handle($data = null, $controller = null, $action = nul
 /**
  * 系统内置异常处理器
  * 处理逻辑：
- * 1、json请求，以json返回
- * 2、MessageException 只输出 message
+ * 1、不支持 json 响应格式，会自动检测模板
+ * 2、只有 MessageException 才输出data，其他 Exception 均只输出 message 和 code
  * 3、RouterException
  * @param \Exception $e
  * @return false|void
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_exception_handle(Exception $e){
-	if(!http_from_json_request()){
+	//不支持JSON响应的访问
+	if(!http_request_accept_json()){
 		if($e instanceof MessageException){
 			if(page_exists(PLITE_PAGE_MESSAGE)){
 				include_page(PLITE_PAGE_MESSAGE, ['exception' => $e]);
@@ -131,13 +137,13 @@ function default_exception_handle(Exception $e){
 		echo $e->getMessage();
 		return false;
 	}
-	http_header_json_response();
-	$json_str = json_encode([
+
+	//支持JSON响应
+	http_json_response([
 		'code'    => $e->getCode() ?: MessageException::$CODE_DEFAULT_ERROR, //避免一般exception code = 0 情况
 		'message' => $e->getMessage(),
 		'data'    => $e instanceof MessageException ? $e->toArray() : null,
-	], JSON_UNESCAPED_UNICODE);
-	echo $json_str;
+	]);
 }
 
 /**
