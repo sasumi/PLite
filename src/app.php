@@ -7,7 +7,6 @@ use LFPhp\PLite\Exception\PLiteException;
 use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\http_from_json_request;
-use function LFPhp\Func\http_header_json_response;
 use function LFPhp\Func\http_json_response;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_request_accept_json;
