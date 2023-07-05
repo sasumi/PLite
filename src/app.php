@@ -107,8 +107,9 @@ function default_response_handle($data = null, $controller = null, $action = nul
  * 1、不支持 json 响应格式，会自动检测模板
  * 2、只有 MessageException 才输出data，其他 Exception 均只输出 message 和 code
  * 3、RouterException
+ * 注意：不中断其他异常事件处理，如果系统有其他异常记录函数，需要自行区分 MessageException 的情况。
  * @param \Exception $e
- * @return false|void
+ * @return true
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_exception_handle(Exception $e){
@@ -117,32 +118,38 @@ function default_exception_handle(Exception $e){
 		if($e instanceof MessageException){
 			if(page_exists(PLITE_PAGE_MESSAGE)){
 				include_page(PLITE_PAGE_MESSAGE, ['exception' => $e]);
-				return false;
+				return true;
 			}
 			if($forward_url = $e->getForwardUrl()){
 				http_redirect($forward_url);
 			}
 			echo $e->getMessage();
-			return false;
+			return true;
 		}
 		if($e instanceof RouterException && page_exists(PLITE_PAGE_NO_FOUND)){
 			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
-			return false;
+			return true;
 		}
 		if(page_exists(PLITE_PAGE_ERROR)){
 			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
-			return false;
+			return true;
 		}
 		echo $e->getMessage();
-		return false;
+		return true;
+	}
+	//避免一般exception code = 0 情况
+	$msg_code = $e->getCode();
+	if(!$msg_code && !($e instanceof MessageException)){
+		$msg_code = MessageException::$CODE_DEFAULT_ERROR;
 	}
 
 	//支持JSON响应
 	http_json_response([
-		'code'    => $e->getCode() ?: MessageException::$CODE_DEFAULT_ERROR, //避免一般exception code = 0 情况
+		'code'    => $msg_code,
 		'message' => $e->getMessage(),
 		'data'    => $e instanceof MessageException ? $e->toArray() : null,
 	]);
+	return true;
 }
 
 /**
