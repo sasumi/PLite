@@ -145,9 +145,10 @@ function default_exception_handle(Exception $e){
 
 	//支持JSON响应
 	http_json_response([
-		'code'    => $msg_code,
-		'message' => $e->getMessage(),
-		'data'    => $e instanceof MessageException ? $e->toArray() : null,
+		'code'        => $msg_code,
+		'message'     => $e->getMessage(),
+		'forward_url' => $e instanceof MessageException ? $e->getForwardUrl() : '',
+		'data'        => $e instanceof MessageException ? $e->toArray() : null,
 	]);
 	return true;
 }
