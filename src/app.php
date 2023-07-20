@@ -32,8 +32,14 @@ function start_web(){
 				if($req_str){
 					$obj = @json_decode($req_str, true);
 					if(!json_last_error()){
+						$is_post = $_SERVER['REQUEST_METHOD'] === 'POST';
+						$is_get = $_SERVER['REQUEST_METHOD'] === 'GET';
 						foreach($obj as $k => $val){
-							$_POST[$k] = $val;
+							if($is_post){
+								$_POST[$k] = $val;
+							} else if($is_get){
+								$_GET[$k] = $val;
+							}
 							$_REQUEST[$k] = $val;
 						}
 					}

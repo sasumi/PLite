@@ -91,7 +91,7 @@ function match_router($uri = ''){
 function call_route($route_item, &$match_controller = null, &$match_action = null){
 	fire_event(EVENT_ROUTER_HIT, $route_item);
 	if(is_callable($route_item)){
-		return call_user_func($route_item);
+		return call_user_func($route_item, $_REQUEST);
 	}
 	if(is_url($route_item)){
 		http_redirect($route_item);
@@ -120,7 +120,7 @@ function call_route($route_item, &$match_controller = null, &$match_action = nul
 		}
 		fire_event(EVENT_APP_BEFORE_EXEC, $match_controller, $match_action);
 		$controller = new $match_controller;
-		return call_user_func([$controller, $match_action]);
+		return call_user_func([$controller, $match_action], $_REQUEST);
 	}
 	throw new RouterException('Router call fail:'.$route_item);
 }
