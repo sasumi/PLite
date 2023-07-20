@@ -10,7 +10,7 @@
 composer require lfphp/plite
 ```
 
-### 基本用法
+## 基本用法
 
 框架基本用法请参考 `test/DemoProject` 目录中的代码示例。
 
@@ -76,7 +76,33 @@ return [
 
 ### 控制器
 
-框架控制器无任何限制，任何类、方法都可以注册成为控制器。当然，使用过程建议设计项目控制器父类，方便对一些统一行为（如鉴权、统一日志等）进行处理。
+框架控制器无任何限制，任何类、方法都可以注册成为控制器。当然，使用过程建议设计项目控制器父类，方便对一些统一行为（如鉴权、统一日志等）进行处理。路由器中 `$_REQUEST` 参数会被当成第一个参数传递给 `action` 方法。
+
+```php
+//推荐 Controller 模型
+
+/**
+ * Controller 为公共定义的共同父类，方便在 Controller::__construct() 方法中实现统一逻辑处理
+ */
+class Order extends Controller {
+    use AuthorizedTrait; //推荐建立 trait 来实现类似鉴权等能力
+    
+    /**
+     * @param array $request //框架路由机制统一传递 $_REQUEST 变量到 action方法中
+     */
+    public function index($request){
+        self::noVisited();
+        var_dump($request['hello']);
+    }
+    
+    /**
+     * 静态方法不会被路由访问到，可以放心使用
+     */
+    public static function noVisited(){
+        
+    }    
+}
+```
 
 ### 视图
 
