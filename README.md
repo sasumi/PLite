@@ -16,7 +16,7 @@ composer require lfphp/plite
 
 ### 配置文件
 
-#### 一、全局控制变量
+全局控制变量
 
 除 `PLITE_APP_ROOT` 需要在项目中手工配置，其他 `PLITE_*` 常量均有缺省值。以下仅列出部分重要常量，如需了解全部常量定义，可以查阅框架代码文件：`src/defines.php` 。
 
@@ -96,7 +96,7 @@ class Order extends Controller {
     }
     
     /**
-     * 静态方法不会被路由访问到，可以放心使用
+     * 静态方法不会被路由访问到
      */
     public static function noVisited(){
         
