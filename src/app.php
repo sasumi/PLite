@@ -170,9 +170,14 @@ function set_app_env($app_env){
 /**
  * 获取应用环境标识
  * @return mixed
+ * @throws \Exception
  */
 function get_app_env(){
-	return $_SERVER[PLITE_SERVER_APP_ENV_KEY];
+	$env = $_SERVER[PLITE_SERVER_APP_ENV_KEY];
+	if(!$env){
+		throw new PLiteException('no env detected:'.PLITE_SERVER_APP_ENV_KEY);
+	}
+	return $env;
 }
 
 /**
