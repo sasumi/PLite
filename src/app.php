@@ -85,6 +85,7 @@ function start_web(){
  * @param mixed|null $data
  * @param string|null $controller
  * @param string|null $action
+ * @return bool 是否命中处理逻辑
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_response_handle($data = null, $controller = null, $action = null){
@@ -94,7 +95,7 @@ function default_response_handle($data = null, $controller = null, $action = nul
 			'code'    => MessageException::$CODE_DEFAULT_SUCCESS,
 			'message' => '成功',
 		]);
-		return;
+		return true;
 	}
 
 	//自动模板
@@ -103,8 +104,10 @@ function default_response_handle($data = null, $controller = null, $action = nul
 		$tpl = strtolower("$ctrl/$action.php");
 		if(page_exists($tpl)){
 			include_page($tpl, $data);
+			return true;
 		}
 	}
+	return false;
 }
 
 /**
