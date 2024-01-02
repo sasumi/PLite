@@ -85,6 +85,7 @@ function start_web(){
  * @param mixed|null $data
  * @param string|null $controller
  * @param string|null $action
+ * @return bool 是否命中处理逻辑
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_response_handle($data = null, $controller = null, $action = null){
@@ -94,7 +95,7 @@ function default_response_handle($data = null, $controller = null, $action = nul
 			'code'    => MessageException::$CODE_DEFAULT_SUCCESS,
 			'message' => '成功',
 		]);
-		return;
+		return true;
 	}
 
 	//自动模板
@@ -103,8 +104,10 @@ function default_response_handle($data = null, $controller = null, $action = nul
 		$tpl = strtolower("$ctrl/$action.php");
 		if(page_exists($tpl)){
 			include_page($tpl, $data);
+			return true;
 		}
 	}
+	return false;
 }
 
 /**
@@ -170,9 +173,14 @@ function set_app_env($app_env){
 /**
  * 获取应用环境标识
  * @return mixed
+ * @throws \Exception
  */
 function get_app_env(){
-	return $_SERVER[PLITE_SERVER_APP_ENV_KEY];
+	$env = $_SERVER[PLITE_SERVER_APP_ENV_KEY];
+	if(!$env){
+		throw new PLiteException('no env detected:'.PLITE_SERVER_APP_ENV_KEY);
+	}
+	return $env;
 }
 
 /**
