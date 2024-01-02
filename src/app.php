@@ -154,7 +154,7 @@ function default_exception_handle(Exception $e){
 		'code'        => $msg_code,
 		'message'     => $e->getMessage(),
 		'forward_url' => $e instanceof MessageException ? $e->getForwardUrl() : '',
-		'data'        => $e instanceof MessageException ? $e->toArray() : null,
+		'data'        => $e instanceof MessageException ? $e->getData() : null,
 	]);
 	return true;
 }
