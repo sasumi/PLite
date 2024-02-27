@@ -33,7 +33,7 @@ if(!defined('PLITE_APP_ROOT')){
 //ENV KEY
 !defined('PLITE_SERVER_APP_ENV_KEY') && define('PLITE_SERVER_APP_ENV_KEY', 'APP_ENV');
 
-//404页面（传入 exception 变量）
+//消息错误页面（传入 exception 变量）
 !defined('PLITE_PAGE_MESSAGE') && define('PLITE_PAGE_MESSAGE', 'message.php');
 
 //404页面（传入 exception 变量）
