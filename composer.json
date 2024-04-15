@@ -7,7 +7,6 @@
 			"LFPhp\\PLite\\": "src/"
 		},
 		"files": [
-			"./script/scaffold.php",
 			"./src/app.php",
 			"./src/config.php",
 			"./src/defines.php",
