@@ -191,11 +191,12 @@ function get_app_env(){
 function get_app_var_name(){
 	$name = get_app_name();
 	$var_name = str_replace('/', '_', $name);
-	return underscores_to_pascalcase($var_name);
+	return ucfirst(underscores_to_pascalcase($var_name));
 }
 
 /**
  * 获取应用命名空间
+ * 从应用名称中按照首字母大写方式转换，如项目：jack/project 会产生 Jack\Project 命名空间
  * @return string
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
@@ -209,7 +210,7 @@ function get_app_namespace(){
 }
 
 /**
- * 获取应用名称
+ * 从composer.json 中获取应用名称，规范命令例如 jack/project，具体命名规则可以参考Composer官方说明
  * @return string
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
@@ -224,9 +225,12 @@ function get_app_name(){
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function get_app_composer_config(){
+	if(!defined('PLITE_APP_ROOT')){
+		throw new Exception('You are no in plite env');
+	}
 	$composer_json_file = PLITE_APP_ROOT.'/composer.json';
 	if(!is_file($composer_json_file)){
-		throw new PLiteException('composer json file no exists:'.$composer_json_file);
+		throw new PLiteException('Composer json file no exists:'.$composer_json_file);
 	}
 	return json_decode(file_get_contents($composer_json_file), true);
 }

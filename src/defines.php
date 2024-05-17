@@ -1,13 +1,13 @@
 <?php
 namespace LFPhp\PLite;
 
-use LFPhp\PLite\Exception\PLiteException;
-
 //框架ID
 define('PLITE_ID', 'PLite');
 
 if(!defined('PLITE_APP_ROOT')){
-	throw new PLiteException('PLITE_APP_ROOT require to define');
+	//如果项目没有启动PLite框架，可以不要求定义以下常量，但程序无法正常使用以下常量
+	//throw new PLiteException('PLITE_APP_ROOT require to define');
+	return;
 }
 
 //站点根路径，缺省使用 [/] 作为根路径
