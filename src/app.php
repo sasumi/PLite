@@ -221,14 +221,18 @@ function get_app_name(){
 
 /**
  * 获取应用 composer 配置
+ * 环境必须通过 composer packagist 安装方式才能调用该方法
  * @return array
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function get_app_composer_config(){
-	if(!defined('PLITE_APP_ROOT')){
-		throw new Exception('You are no in plite env');
+	if(class_exists('\Composer\InstalledVersions')){
+		$r = \Composer\InstalledVersions::getRootPackage();
+		$root = realpath($r['install_path']);
+	}else{
+		throw new Exception('No composer class [Composer\InstalledVersions] detected');
 	}
-	$composer_json_file = PLITE_APP_ROOT.'/composer.json';
+	$composer_json_file = $root.'/composer.json';
 	if(!is_file($composer_json_file)){
 		throw new PLiteException('Composer json file no exists:'.$composer_json_file);
 	}
