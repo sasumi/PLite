@@ -12,7 +12,7 @@ if(!defined('PLITE_APP_ROOT')){
 
 //站点根路径，缺省使用 [/] 作为根路径
 //在实际项目中，建议配置指定host
-!defined('PLITE_SITE_ROOT') && define('PLITE_SITE_ROOT', '/');
+!defined('PLITE_SITE_ROOT') && define('PLITE_SITE_ROOT', '');
 
 //配置目录，提供给 get_config 函数使用
 !defined('PLITE_CONFIG_PATH') && define('PLITE_CONFIG_PATH', PLITE_APP_ROOT.'/config');
