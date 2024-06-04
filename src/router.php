@@ -4,6 +4,7 @@ namespace LFPhp\PLite;
 use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
+use function LFPhp\Func\event_fire;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 
@@ -26,7 +27,7 @@ function url($uri = '', $params = [], $force_exists = false){
 	$params = array_clear_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
 	$url = PLITE_SITE_ROOT."?".PLITE_ROUTER_KEY."=$uri".$ps;
-	fire_event(EVENT_ROUTER_URL, $url, $uri, $params);
+	event_fire(EVENT_ROUTER_URL, $url, $uri, $params);
 	return $url;
 }
 
@@ -89,7 +90,7 @@ function match_router($uri = ''){
  * @throws \LFPhp\PLite\Exception\RouterException
  */
 function call_route($route_item, &$match_controller = null, &$match_action = null){
-	fire_event(EVENT_ROUTER_HIT, $route_item);
+	event_fire(EVENT_ROUTER_HIT, $route_item);
 	if(is_callable($route_item)){
 		return call_user_func($route_item, $_REQUEST);
 	}
@@ -118,7 +119,7 @@ function call_route($route_item, &$match_controller = null, &$match_action = nul
 				throw new RouterException('Method no accessible:'.$match_action);
 			}
 		}
-		fire_event(EVENT_APP_BEFORE_EXEC, $match_controller, $match_action);
+		event_fire(EVENT_APP_BEFORE_EXEC, $match_controller, $match_action);
 		$controller = new $match_controller;
 		return call_user_func([$controller, $match_action], $_REQUEST);
 	}

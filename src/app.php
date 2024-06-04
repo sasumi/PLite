@@ -5,6 +5,7 @@ use Exception;
 use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\PLiteException;
 use LFPhp\PLite\Exception\RouterException;
+use function LFPhp\Func\event_fire;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\http_from_json_request;
 use function LFPhp\Func\http_json_response;
@@ -24,7 +25,7 @@ function start_web(){
 			$wildcard = '*';
 			$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 
-			fire_event(EVENT_APP_START);
+			event_fire(EVENT_APP_START);
 
 			//fix json
 			if(http_from_json_request()){
@@ -66,14 +67,14 @@ function start_web(){
 			}
 			throw new RouterException("Router no found");
 		}
-		fire_event(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
+		event_fire(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
 	}catch(Exception $e){
-		$r = fire_event(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
+		$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
 		if($r !== EVENT_PAYLOAD_BREAK_NEXT){
 			throw $e; //未中断异常处理，直接继续往上抛
 		}
 	}finally{
-		fire_event(EVENT_APP_FINISHED);
+		event_fire(EVENT_APP_FINISHED);
 	}
 }
 

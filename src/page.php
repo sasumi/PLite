@@ -2,6 +2,7 @@
 namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\PLiteException;
+use function LFPhp\Func\event_fire;
 use function LFPhp\Func\file_in_dir;
 use function LFPhp\Func\html_tag;
 use function LFPhp\Func\html_tag_css;
@@ -13,7 +14,7 @@ use function LFPhp\Func\static_version_set;
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function include_page($page_file, $params = [], $as_return = false){
-	fire_event(EVENT_BEFORE_INCLUDE_PAGE, $page_file, $params);
+	event_fire(EVENT_BEFORE_INCLUDE_PAGE, $page_file, $params);
 	if(!page_exists($page_file)){
 		throw new PLiteException("Template no found($page_file)");
 	}
@@ -25,7 +26,7 @@ function include_page($page_file, $params = [], $as_return = false){
 	}
 	$f = PLITE_PAGE_PATH."/$page_file";
 	include $f;
-	fire_event(EVENT_AFTER_INCLUDE_PAGE, $f, $params);
+	event_fire(EVENT_AFTER_INCLUDE_PAGE, $f, $params);
 	if($as_return){
 		$html = ob_get_contents();
 		ob_clean();

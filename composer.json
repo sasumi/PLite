@@ -10,7 +10,6 @@
 			"./src/app.php",
 			"./src/config.php",
 			"./src/defines.php",
-			"./src/event.php",
 			"./src/page.php",
 			"./src/router.php"
 		]
@@ -23,6 +22,6 @@
 	],
 	"require": {
 		"ext-json": "*",
-		"lfphp/func": "^1.1"
+		"lfphp/func": "^1.2"
 	}
 }

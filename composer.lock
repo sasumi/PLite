@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "88ff084900c7412aca65601894c02abf",
+    "content-hash": "68eb1c2b5b1e519ef356cef1bdf150ce",
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "1.1.46",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "e7a82f55133dcd3f1916512fdcbaed40d989224d"
+                "reference": "d410aab07ec8e4236f29510869db8dfffd1512c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/e7a82f55133dcd3f1916512fdcbaed40d989224d",
-                "reference": "e7a82f55133dcd3f1916512fdcbaed40d989224d",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/d410aab07ec8e4236f29510869db8dfffd1512c5",
+                "reference": "d410aab07ec8e4236f29510869db8dfffd1512c5",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,8 @@
                 "php": ">=5.6"
             },
             "require-dev": {
-                "ext-ssh2": "*"
+                "ext-ssh2": "*",
+                "jasny/phpdoc-parser": "^1.0"
             },
             "type": "library",
             "autoload": {
@@ -40,6 +41,7 @@
                     "src/curl.php",
                     "src/db.php",
                     "src/env.php",
+                    "src/event.php",
                     "src/file.php",
                     "src/font.php",
                     "src/html.php",
@@ -69,9 +71,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/1.1.46"
+                "source": "https://github.com/sasumi/Func/tree/1.2.6"
             },
-            "time": "2023-07-03T15:51:40+00:00"
+            "time": "2024-06-04T03:03:58+00:00"
         }
     ],
     "packages-dev": [],
@@ -84,5 +86,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
