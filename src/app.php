@@ -12,6 +12,14 @@ use function LFPhp\Func\http_json_response;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_request_accept_json;
 use function LFPhp\Func\underscores_to_pascalcase;
+use const LFPhp\Func\EVENT_PAYLOAD_BREAK_NEXT;
+
+//框架内置事件
+const EVENT_APP_START = __NAMESPACE__.'EVENT_APP_START';
+const EVENT_APP_BEFORE_EXEC = __NAMESPACE__.'EVENT_APP_BEFORE_EXEC';
+const EVENT_APP_EXECUTED = __NAMESPACE__.'EVENT_APP_EXECUTED';
+const EVENT_APP_FINISHED = __NAMESPACE__.'EVENT_APP_FINISHED';
+const EVENT_APP_EXCEPTION = __NAMESPACE__.'EVENT_APP_EXCEPTION';
 
 /**
  * 开始运行web服务

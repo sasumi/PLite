@@ -10,6 +10,9 @@ use function LFPhp\Func\html_tag_js;
 use function LFPhp\Func\static_version_patch;
 use function LFPhp\Func\static_version_set;
 
+const EVENT_BEFORE_INCLUDE_PAGE = __NAMESPACE__.'EVENT_BEFORE_INCLUDE_PAGE';
+const EVENT_AFTER_INCLUDE_PAGE = __NAMESPACE__.'EVENT_AFTER_INCLUDE_PAGE';
+
 /**
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
