@@ -8,9 +8,6 @@ use function LFPhp\Func\event_fire;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 
-const EVENT_ROUTER_HIT = __NAMESPACE__.'EVENT_ROUTER_HIT';
-const EVENT_ROUTER_URL = __NAMESPACE__.'EVENT_ROUTER_URL';
-
 /**
  * @param string $uri
  * @param array $params
