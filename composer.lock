@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7d3983456a2f8fb00b6259f2d390339",
+    "content-hash": "68eb1c2b5b1e519ef356cef1bdf150ce",
     "packages": [
         {
             "name": "lfphp/func",
@@ -76,58 +76,7 @@
             "time": "2024-06-11T07:15:19+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "lfphp/logger",
-            "version": "1.1.39",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sasumi/Logger.git",
-                "reference": "3ab4fcd47f8d7da36cdb1c232ba464707d3ea6cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Logger/zipball/3ab4fcd47f8d7da36cdb1c232ba464707d3ea6cf",
-                "reference": "3ab4fcd47f8d7da36cdb1c232ba464707d3ea6cf",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "lfphp/func": "^1.1",
-                "php": ">=5.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "LFPhp\\Logger\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Sasumi.H",
-                    "email": "cnsasumi@outlook.com",
-                    "homepage": "http://blog.yikepi.com/"
-                }
-            ],
-            "description": "A lite logger for PHP. make log easier to use.",
-            "homepage": "http://blog.yikepi.com/",
-            "keywords": [
-                "lite",
-                "log",
-                "logger"
-            ],
-            "support": {
-                "issues": "https://github.com/sasumi/Logger/issues",
-                "source": "https://github.com/sasumi/Logger/tree/1.1.39"
-            },
-            "time": "2024-06-06T14:38:05+00:00"
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

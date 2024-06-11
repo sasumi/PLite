@@ -5,7 +5,6 @@ use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\event_fire;
-use function LFPhp\Func\event_register;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\is_url;

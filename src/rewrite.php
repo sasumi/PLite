@@ -1,6 +1,5 @@
 <?php
 namespace LFPhp\PLite;
-use LFPhp\Logger\Logger;
 use function LFPhp\Func\event_register;
 
 const PATTERN_HOLDER = 'PATTERN_HOLDER';
@@ -41,13 +40,9 @@ function __rewrite_match_uri($uri_pattern, $uri, &$replacement = []){
  * @param array $mapping mapping 规则请参考 [/REWRITE.md](REWRITE.md)
  * @return void
  */
-function router_rewrite_bind_url($mapping, Logger $logger){
-	event_register(EVENT_ROUTER_URL, function(&$url, $uri, $param)use($mapping, $logger){
-		$r = compact('uri', 'param');
-		$logger->debug('待处理 url() 函数', $r);
+function router_rewrite_bind_url($mapping){
+	event_register(EVENT_ROUTER_URL, function(&$url, $uri, $param)use($mapping){
 		foreach($mapping as $url_pattern => list($uri_pattern, $param_pattern)){
-			$p = compact('uri_pattern', 'param_pattern');
-
 			//格式为：
 			// '$1' => 'value1'
 			// '$2' => 'value2'
@@ -56,18 +51,14 @@ function router_rewrite_bind_url($mapping, Logger $logger){
 			$replacement = [];
 			$match_param_keys = []; //已经匹配的param key, 剩余未替换变量，统一补充到尾部成为 query string
 			if(__rewrite_match_uri($uri_pattern, $uri, $replacement)){
-				$logger->debug('[uri] 匹配，继续处理param', $r, $p);
 				foreach($param_pattern?:[] as $k=>$holder){
 					if(!isset($param[$k])){
 						//参数不满足，匹配下一个规则
-						$logger->debug("[param] 参数不满足，缺少 {$k}，匹配下一个规则， url()参数：", $r, $p);
 						continue 2;
 					}
 					$replacement[$holder] = $param[$k];
 					$match_param_keys[] = $k;
 				}
-
-				$logger->info('开始处理 url_pattern 部分', compact('url_pattern', 'replacement'), $r, $p);
 
 				//表达式转换成占位符模式，
 				//如：{W}/{W}.html
@@ -85,23 +76,15 @@ function router_rewrite_bind_url($mapping, Logger $logger){
 				if($ext_param){
 					$url .= (strpos($url, '?') !== false ? '&':'?').http_build_query($ext_param);
 				}
-
 				//清理掉没用的 {}
 				if(preg_match('/{\w+}/', $url)){
 					$url = preg_replace('/{\w+}/', '', $url);
-					$logger->debug('还有占位符未替换');
 				}
-
 				$url = PLITE_SITE_ROOT.$url;
-				$logger->info('处理完 URL: '.PLITE_SITE_ROOT.$url);
 				return true;
-			} else {
-				$logger->debug('规则不匹配');
 			}
 		}
-
 		//no match
-		$logger->warning('url() no match', compact('uri', 'param'));
 		return false;
 	});
 }
@@ -110,11 +93,10 @@ function router_rewrite_bind_url($mapping, Logger $logger){
  * 处理当前请求path info
  * @param array $mapping
  * @param string|null $path_info
- * @param \LFPhp\Logger\Logger $logger
  * @return bool
  * @throws \Exception
  */
-function router_rewrite_execute_path($mapping, $path_info, Logger $logger){
+function router_rewrite_resolve_path($mapping, $path_info){
 	//解析识别当前访问URL
 	$path_info = $path_info === null ? $_SERVER['PATH_INFO'] : $path_info;
 	$path_info = trim($path_info, '/');
@@ -148,7 +130,6 @@ function router_rewrite_execute_path($mapping, $path_info, Logger $logger){
 		$pattern = "#$u_pt#u";
 
 		if(preg_match($pattern, $path_info, $ms)){
-			$logger->debug('matched', compact('pattern', 'path_info', 'ms'));
 			$uri = __reg_var_replace($uri_pattern, $ms);
 			$ps = $_GET;
 			foreach($param_pattern as $k => $v){
@@ -156,41 +137,24 @@ function router_rewrite_execute_path($mapping, $path_info, Logger $logger){
 				$v = __reg_var_replace($v, $ms);
 				$ps[$k] = urldecode($v);
 			}
-			$logger->debug('rewrite matched:', [
-				'pattern' => $url_pattern,
-				'uri'     => $uri_pattern,
-				'param'   => $param_pattern,
-			], ['uri' => $uri, 'param' => $ps,], 1);
 			set_router($uri, $ps);
 			return true;
-		} else {
-			$logger->warning('no match', compact('pattern', 'path_info', 'ms'));
 		}
 	}
-	$logger && $logger->debug('rewrite no match', $path_info);
 	return false;
 }
 
 /**
  * 通过 pathinfo 设置路由映射
- * @param array $mapping 路由映射规则，格式为：
- * $mapping = [
- *   pathinfo 匹配正则表达式 => [URI, 参数列表], 其中URI和参数列表均可以通过 $1 动态参数实现替换
- * 例子：
- *  '\/article/detail/id_(\d+)\.html' => ['article/detail', ['id'='$1']],
- *  '\/article/cat_(\d+)\.html(.*?)' => ['article/catalog', ['cat_id'='$1', '$2']],
- * ]
+ * @param array $mapping mapping 规则请参考 [/REWRITE.md](REWRITE.md)
  * @param string|null $path_info pathinfo 信息，缺省由 $_SERVER['PATH_INFO'] 中获取
- * @praam Logger|null logger
  * @return void
  * @throws \Exception
  */
-function router_setup_rewrite_mapping($mapping, $path_info = null, Logger $logger = null){
-	$logger = $logger ?: Logger::instance(PLITE_ID);
-
+function router_setup_rewrite_mapping($mapping, $path_info = null){
 	//1. 绑定 url() 函数
-	router_rewrite_bind_url($mapping, $logger);
+	router_rewrite_bind_url($mapping);
 
 	//2. 处理当前请求
-	router_rewrite_execute_path($mapping, $path_info, $logger);
+	router_rewrite_resolve_path($mapping, $path_info);
 }

@@ -24,8 +24,5 @@
 	"require": {
 		"ext-json": "*",
 		"lfphp/func": "^1.2"
-	},
-	"require-dev": {
-		"lfphp/logger": "*"
 	}
 }
