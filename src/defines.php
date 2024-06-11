@@ -2,7 +2,7 @@
 namespace LFPhp\PLite;
 
 //框架ID
-define('PLITE_ID', 'PLite');
+define('PLITE_ID', 'PLITE');
 
 if(!defined('PLITE_APP_ROOT')){
 	//如果项目没有启动PLite框架，可以不要求定义以下常量，但程序无法正常使用以下常量

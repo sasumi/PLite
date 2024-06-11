@@ -9,6 +9,7 @@ use function LFPhp\Func\html_tag_css;
 use function LFPhp\Func\html_tag_js;
 use function LFPhp\Func\static_version_patch;
 use function LFPhp\Func\static_version_set;
+use function LFPhp\Func\str_start_with;
 
 /**
  * @throws \LFPhp\PLite\Exception\PLiteException
@@ -52,7 +53,7 @@ function page_exists($page_file){
  * @throws \Exception
  */
 function include_js($js_src, $attr = []){
-	echo html_tag_js(patch_resource_version($js_src), $attr);
+	echo html_tag_js(patch_resource_version(patch_site_path($js_src)), $attr);
 }
 
 /**
@@ -62,7 +63,7 @@ function include_js($js_src, $attr = []){
  * @throws \Exception
  */
 function include_css($css_href, $attr = []){
-	echo html_tag_css(patch_resource_version($css_href), $attr);
+	echo html_tag_css(patch_resource_version(patch_site_path($css_href)), $attr);
 }
 
 /**
@@ -72,8 +73,24 @@ function include_css($css_href, $attr = []){
  * @throws \Exception
  */
 function include_img($src, $attr = []){
-	$attr['src'] = patch_resource_version($src);
+	$attr['src'] = patch_resource_version(patch_site_path($src));
 	echo html_tag('img', $attr);
+}
+
+/**
+ * 补充网站访问目录相对路径
+ * @param string $url_or_path
+ * @return string
+ */
+function patch_site_path($url_or_path){
+	if(!PLITE_SITE_ROOT || str_start_with($url_or_path, ['/', 'http:', 'https:'])){
+		return $url_or_path;
+	}
+	//trim ./ prefix
+	if(strpos($url_or_path, './') === 0){
+		return PLITE_SITE_ROOT.substr($url_or_path, 2);
+	}
+	return PLITE_SITE_ROOT.$url_or_path;
 }
 
 /**
