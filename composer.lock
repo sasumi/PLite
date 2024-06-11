@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68eb1c2b5b1e519ef356cef1bdf150ce",
+    "content-hash": "e7d3983456a2f8fb00b6259f2d390339",
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "1.2.6",
+            "version": "1.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "d410aab07ec8e4236f29510869db8dfffd1512c5"
+                "reference": "ea27dbba13dcfcdd57d54cc539dd424c6ba056f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/d410aab07ec8e4236f29510869db8dfffd1512c5",
-                "reference": "d410aab07ec8e4236f29510869db8dfffd1512c5",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/ea27dbba13dcfcdd57d54cc539dd424c6ba056f2",
+                "reference": "ea27dbba13dcfcdd57d54cc539dd424c6ba056f2",
                 "shasum": ""
             },
             "require": {
@@ -71,12 +71,63 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/1.2.6"
+                "source": "https://github.com/sasumi/Func/tree/1.2.10"
             },
-            "time": "2024-06-04T03:03:58+00:00"
+            "time": "2024-06-11T07:15:19+00:00"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "lfphp/logger",
+            "version": "1.1.39",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sasumi/Logger.git",
+                "reference": "3ab4fcd47f8d7da36cdb1c232ba464707d3ea6cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sasumi/Logger/zipball/3ab4fcd47f8d7da36cdb1c232ba464707d3ea6cf",
+                "reference": "3ab4fcd47f8d7da36cdb1c232ba464707d3ea6cf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "lfphp/func": "^1.1",
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "LFPhp\\Logger\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sasumi.H",
+                    "email": "cnsasumi@outlook.com",
+                    "homepage": "http://blog.yikepi.com/"
+                }
+            ],
+            "description": "A lite logger for PHP. make log easier to use.",
+            "homepage": "http://blog.yikepi.com/",
+            "keywords": [
+                "lite",
+                "log",
+                "logger"
+            ],
+            "support": {
+                "issues": "https://github.com/sasumi/Logger/issues",
+                "source": "https://github.com/sasumi/Logger/tree/1.1.39"
+            },
+            "time": "2024-06-06T14:38:05+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

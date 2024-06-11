@@ -7,9 +7,9 @@ use function LFPhp\Func\file_in_dir;
 use function LFPhp\Func\html_tag;
 use function LFPhp\Func\html_tag_css;
 use function LFPhp\Func\html_tag_js;
+use function LFPhp\Func\is_url;
 use function LFPhp\Func\static_version_patch;
 use function LFPhp\Func\static_version_set;
-use function LFPhp\Func\str_start_with;
 
 /**
  * @throws \LFPhp\PLite\Exception\PLiteException
@@ -83,7 +83,7 @@ function include_img($src, $attr = []){
  * @return string
  */
 function patch_site_path($url_or_path){
-	if(!PLITE_SITE_ROOT || str_start_with($url_or_path, ['/', 'http:', 'https:'])){
+	if(!PLITE_SITE_ROOT || $url_or_path[0] === '/' || is_url($url_or_path)){
 		return $url_or_path;
 	}
 	//trim ./ prefix

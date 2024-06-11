@@ -5,11 +5,14 @@ use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
 use function LFPhp\Func\array_clear_null;
 use function LFPhp\Func\event_fire;
+use function LFPhp\Func\event_register;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
+use function LFPhp\Func\is_url;
 
 /**
- * @param string $uri
+ * URL 路由函数
+ * @param string $uri URI 字符串，一般为 ctrl/act 格式。如果系统复杂，也可以是多段命名空间等。
  * @param array $params
  * @param false $force_exists
  * @return string
@@ -31,6 +34,13 @@ function url($uri = '', $params = [], $force_exists = false){
 	return $url;
 }
 
+/**
+ * 根据uri、params 生成 html hidden 表单字段
+ * 一般在 GET 类型的form中，需要额外提交 input:hidden 表单项来传递uri信息
+ * @param string $uri
+ * @param array $params
+ * @return string
+ */
 function url_input($uri, $params = []){
 	$html = html_tag_hidden(PLITE_ROUTER_KEY, $uri);
 	$params = array_clear_null($params);
@@ -40,27 +50,50 @@ function url_input($uri, $params = []){
 	return $html;
 }
 
-function url_replace($path, $params = []){
+/**
+ * 使用新的参数替换指定URI
+ * @param string $uri
+ * @param array $replacements
+ * @return string
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\RouterException
+ */
+function url_replace($uri, $replacements = []){
 	$ps = $_GET;
-	foreach($params as $k => $v){
+	foreach($replacements as $k => $v){
 		$ps[$k] = $v;
 	}
-	return url($path, $ps);
+	return url($uri, $ps);
 }
 
-function url_hit($path){
-	$uri = ltrim($_SERVER["PATH_INFO"], '/');
-	return $uri == $path;
+/**
+ * 设置覆盖路由信息（包括覆盖 $_GET, $_REQUEST
+ * @param string $uri
+ * @param array $params
+ * @return void
+ */
+function set_router($uri, $params = []){
+	$_GET[PLITE_ROUTER_KEY] = $uri;
+	$_REQUEST[PLITE_ROUTER_KEY] = $uri;
+	foreach($params as $k => $v){
+		$_GET[$k] = $v;
+		$_REQUEST[$k] = $v;
+	}
 }
 
-function is_url($url){
-	return strpos($url, '//') === 0 || filter_var($url, FILTER_VALIDATE_URL);
-}
-
+/**
+ * 获取当前路由URI
+ * @return string
+ */
 function get_router(){
 	return $_GET[PLITE_ROUTER_KEY];
 }
 
+/**
+ * 检测当前路由是否匹配指定URI
+ * @param string $uri
+ * @return bool
+ */
 function match_router($uri = ''){
 	$current_uri = get_router();
 	if(strcasecmp($uri, $current_uri) === 0){

@@ -11,6 +11,7 @@
 			"./src/config.php",
 			"./src/defines.php",
 			"./src/page.php",
+			"./src/rewrite.php",
 			"./src/router.php"
 		]
 	},
@@ -23,5 +24,8 @@
 	"require": {
 		"ext-json": "*",
 		"lfphp/func": "^1.2"
+	},
+	"require-dev": {
+		"lfphp/logger": "*"
 	}
 }
