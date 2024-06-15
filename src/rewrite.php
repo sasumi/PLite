@@ -77,6 +77,7 @@ function rewrite_bind_url($mapping){
 
 				//剩余参数补充到query string
 				$ext_param = $param;
+				unset($ext_param[PLITE_ROUTER_KEY]);
 				foreach($match_param_keys as $k){
 					unset($ext_param[$k]);
 				}
