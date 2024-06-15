@@ -4,7 +4,7 @@
 
 ## 1. 安装
 
-## 1.1 手工安装
+### 1.1 手工安装
 
 请通过git克隆plite仓库下载最新版本框架代码：
 
@@ -12,9 +12,13 @@
 git clone https://github.com/sasumi/PLite.git
 ```
 
-复制代码到项目根目录
+复制代码到项目代码目录，引入启动文件：
 
-### 1.1 通过`composer`安装
+```php
+include_once "autoload.php";
+```
+
+### 1.2 通过`composer`安装
 
 框架环境依赖：
 a. php版本≥7.1
@@ -29,7 +33,12 @@ composer require lfphp/plite
 
 ### 1.3 通过`lfphp/pls`安装
 
+`lfphp/pls` 为plite安装脚本。脚本包含安装plite、初始化项目、ORM生成、CRUD代码生成等多项功能，推荐使用。
 
+安装pls：
+```shell
+composer require lfphp/pls
+```
 
 ## 2. 基本用法
 
