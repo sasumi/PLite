@@ -4,6 +4,18 @@
 
 ## 1. 安装
 
+## 1.1 手工安装
+
+请通过git克隆plite仓库下载最新版本框架代码：
+
+```shell
+git clone https://github.com/sasumi/PLite.git
+```
+
+复制代码到项目根目录
+
+### 1.1 通过`composer`安装
+
 框架环境依赖：
 a. php版本≥7.1
 b. php ext-json 扩展
@@ -14,6 +26,10 @@ c. lfphp/func 函数（自动安装）
 ```shell
 composer require lfphp/plite
 ```
+
+### 1.3 通过`lfphp/pls`安装
+
+
 
 ## 2. 基本用法
 
@@ -65,7 +81,7 @@ $admin_email = get_config('site/admin/email');
 2. `static_version.inc.php` 静态资源版本配置信息（在 `include_js` 等函数总使用）
 
 ### 2.2 路由系统
-
+#### 2.2.1 路由配置
 URL中默认参数名称为： `r` (可通过 `PLITE_ROUTER_KEY` 重置），缺省路由通过queryString方式传参。如：www.abc.com/?r=user/info&id=1。
 框架路由配置默认为：`routes.inc.php` (可以通过 `PLITE_ROUTER_CONFIG_FILE` 重置)。
 路由配置语法为：
@@ -80,6 +96,20 @@ return [
     'product/*' => UserController::class.'@*',
 ]
 ```
+#### 2.2.2 路由系统使用
+```php 
+
+//?r=user/create
+echo url('user/create'); //生成一条创建用户的URL路由
+
+//<input name="r" value="user/update"/>
+//<input name="id" value="1"/>
+echo url_input('user/update', ['id'=>1]); //生成一串用于更新用户1信息的html input字符串
+```
+
+#### 2.2.3 路由重写
+
+请参考 [路由重写规则说明](rewrite.md) 文档。
 
 ### 2.3 控制器
 

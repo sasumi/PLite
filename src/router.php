@@ -15,6 +15,8 @@ use function LFPhp\Func\is_url;
  * @param array $params
  * @param false $force_exists
  * @return string
+ * @example
+ * url('article/index') //表示生成一条索引到 article controller, index方法的url
  * @throws \LFPhp\PLite\Exception\PLiteException
  * @throws \LFPhp\PLite\Exception\RouterException
  */
@@ -63,6 +65,18 @@ function url_replace($uri, $replacements = []){
 		$ps[$k] = $v;
 	}
 	return url($uri, $ps);
+}
+
+/**
+ * 使用新的参数替换当前uri参数部分
+ * @param array $replacements
+ * @return string
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ * @throws \LFPhp\PLite\Exception\RouterException
+ */
+function url_replace_current($replacements = []){
+	$uri = get_router();
+	return url_replace($uri, $replacements);
 }
 
 /**
