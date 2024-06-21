@@ -162,7 +162,7 @@ include_page('user/info.php', ['id'=>1]); //标识引入 src/page/user/info.php 
 
 ## 3. 框架运行时事件
 
-框架运行过程支持通过注册事件 `register_event($event, $payload)` 实现对关键事件进行自定义处理。框架支持事件列表有：
+框架运行过程支持通过注册事件 `event_register($event, $payload)` 实现对关键事件进行自定义处理。框架支持事件列表有：
 
 | 事件key               | 事件描述 | 回调函数参数说明 |
 | --------------------- | -------- | ---------------- |
