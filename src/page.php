@@ -12,6 +12,11 @@ use function LFPhp\Func\static_version_patch;
 use function LFPhp\Func\static_version_set;
 
 /**
+ * 引入页面模板
+ * @param string $page_file
+ * @param array $params
+ * @param bool $as_return
+ * @return false|string|null
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function include_page($page_file, $params = [], $as_return = false){
@@ -33,7 +38,22 @@ function include_page($page_file, $params = [], $as_return = false){
 		ob_clean();
 		return $html;
 	}
+	$GLOBALS['__plite_page_include_map__'][$page_file] = true;
 	return null;
+}
+
+/**
+ * 只引入页面模板一次
+ * @param string $page_file
+ * @param array $params
+ * @return false|string|null
+ * @throws \LFPhp\PLite\Exception\PLiteException
+ */
+function include_page_once($page_file, $params = []){
+	if(!$GLOBALS['__plite_page_include_map__'][$page_file]){
+		return false;
+	}
+	return include_page($page_file, $params);
 }
 
 /**
