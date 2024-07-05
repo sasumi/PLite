@@ -24,6 +24,9 @@ function include_page($page_file, $params = [], $as_return = false){
 	if(!page_exists($page_file)){
 		throw new PLiteException("Template no found($page_file)");
 	}
+	if(!$as_return){
+		$GLOBALS['__plite_page_include_map__'][$page_file] = true;
+	}
 	if($as_return){
 		ob_start();
 	}
@@ -38,7 +41,6 @@ function include_page($page_file, $params = [], $as_return = false){
 		ob_clean();
 		return $html;
 	}
-	$GLOBALS['__plite_page_include_map__'][$page_file] = true;
 	return null;
 }
 
@@ -50,7 +52,7 @@ function include_page($page_file, $params = [], $as_return = false){
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function include_page_once($page_file, $params = []){
-	if(!$GLOBALS['__plite_page_include_map__'][$page_file]){
+	if($GLOBALS['__plite_page_include_map__'][$page_file]){
 		return false;
 	}
 	return include_page($page_file, $params);
