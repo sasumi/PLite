@@ -1,6 +1,7 @@
 <?php
 namespace LFPhp\PLite;
 
+use Composer\InstalledVersions;
 use Exception;
 use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\PLiteException;
@@ -12,7 +13,7 @@ use function LFPhp\Func\http_json_response;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_request_accept_json;
 use function LFPhp\Func\underscores_to_pascalcase;
-use const LFPhp\Func\EVENT_PAYLOAD_BREAK_NEXT;
+use const LFPhp\Func\EVENT_PAYLOAD_NULL;
 
 /**
  * 开始运行web服务
@@ -71,8 +72,8 @@ function start_web(){
 		event_fire(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
 	}catch(Exception $e){
 		$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
-		if($r !== EVENT_PAYLOAD_BREAK_NEXT){
-			throw $e; //未中断异常处理，直接继续往上抛
+		if($r !== EVENT_PAYLOAD_NULL){
+			throw $e; //未处理过任何异常，继续往上抛
 		}
 	}finally{
 		event_fire(EVENT_APP_FINISHED);
@@ -109,7 +110,6 @@ function default_response_handle($data = null, $controller = null, $action = nul
 			return true;
 		}
 	}
-	return null;
 }
 
 /**
@@ -147,7 +147,6 @@ function default_exception_handle(Exception $e){
 		echo $e->getMessage();
 		return;
 	}
-
 	//避免一般exception code = 0 情况
 	$msg_code = $e->getCode();
 	if(!$msg_code && !($e instanceof MessageException)){
@@ -161,6 +160,7 @@ function default_exception_handle(Exception $e){
 		'forward_url' => $e instanceof MessageException ? $e->getForwardUrl() : '',
 		'data'        => $e instanceof MessageException ? $e->getData() : null,
 	]);
+	return;
 }
 
 /**
@@ -228,7 +228,7 @@ function get_app_name(){
  */
 function get_app_composer_config(){
 	if(class_exists('\Composer\InstalledVersions')){
-		$r = \Composer\InstalledVersions::getRootPackage();
+		$r = InstalledVersions::getRootPackage();
 		$root = realpath($r['install_path']);
 	}else{
 		throw new Exception('No composer class [Composer\InstalledVersions] detected');
