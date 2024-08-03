@@ -87,7 +87,7 @@ function start_web(){
  * @param mixed|null $data
  * @param string|null $controller
  * @param string|null $action
- * @return bool 是否命中处理逻辑
+ * @return true|null 是否命中处理逻辑
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_response_handle($data = null, $controller = null, $action = null){
@@ -109,7 +109,7 @@ function default_response_handle($data = null, $controller = null, $action = nul
 			return true;
 		}
 	}
-	return false;
+	return null;
 }
 
 /**
@@ -120,7 +120,6 @@ function default_response_handle($data = null, $controller = null, $action = nul
  * 3、RouterException
  * 注意：不中断其他异常事件处理，如果系统有其他异常记录函数，需要自行区分 MessageException 的情况。
  * @param \Exception $e
- * @return true
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_exception_handle(Exception $e){
@@ -129,25 +128,26 @@ function default_exception_handle(Exception $e){
 		if($e instanceof MessageException){
 			if(page_exists(PLITE_PAGE_MESSAGE)){
 				include_page(PLITE_PAGE_MESSAGE, ['exception' => $e]);
-				return true;
+				return;
 			}
 			if($forward_url = $e->getForwardUrl()){
 				http_redirect($forward_url);
 			}
 			echo $e->getMessage();
-			return true;
+			return;
 		}
 		if($e instanceof RouterException && page_exists(PLITE_PAGE_NO_FOUND)){
 			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
-			return true;
+			return;
 		}
 		if(page_exists(PLITE_PAGE_ERROR)){
 			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
-			return true;
+			return;
 		}
 		echo $e->getMessage();
-		return true;
+		return;
 	}
+
 	//避免一般exception code = 0 情况
 	$msg_code = $e->getCode();
 	if(!$msg_code && !($e instanceof MessageException)){
@@ -161,7 +161,6 @@ function default_exception_handle(Exception $e){
 		'forward_url' => $e instanceof MessageException ? $e->getForwardUrl() : '',
 		'data'        => $e instanceof MessageException ? $e->getData() : null,
 	]);
-	return true;
 }
 
 /**
