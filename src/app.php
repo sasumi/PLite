@@ -72,7 +72,7 @@ function start_web(){
 		event_fire(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
 	}catch(Exception $e){
 		$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
-		if($r !== EVENT_PAYLOAD_NULL){
+		if($r === EVENT_PAYLOAD_NULL){
 			throw $e; //未处理过任何异常，继续往上抛
 		}
 	}finally{
