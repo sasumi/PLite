@@ -54,29 +54,29 @@ function url_input($uri, $params = []){
 /**
  * 使用新的参数替换指定URI
  * @param string $uri
- * @param array $replacements
+ * @param array $replace_map 替换变量组映射 [变量名 => 新变量值,...]  当新变量值为 null 时，做删除处理
  * @return string
- * @throws \LFPhp\PLite\Exception\PLiteException
- * @throws \LFPhp\PLite\Exception\RouterException
  */
-function url_replace($uri, $replacements = []){
+function url_replace($uri, $replace_map = []){
 	$ps = $_GET;
-	foreach($replacements as $k => $v){
-		$ps[$k] = $v;
+	foreach($replace_map as $k => $v){
+		if(is_null($v)){
+			unset($ps[$k]);
+		} else {
+			$ps[$k] = $v;
+		}
 	}
 	return url($uri, $ps);
 }
 
 /**
  * 使用新的参数替换当前uri参数部分
- * @param array $replacements
+ * @param array $replace_map 替换变量组映射 [变量名 => 新变量值,...]  当新变量值为 null 时，做删除处理
  * @return string
- * @throws \LFPhp\PLite\Exception\PLiteException
- * @throws \LFPhp\PLite\Exception\RouterException
  */
-function url_replace_current($replacements = []){
+function url_replace_current($replace_map = []){
 	$uri = get_router();
-	return url_replace($uri, $replacements);
+	return url_replace($uri, $replace_map);
 }
 
 /**
@@ -116,8 +116,8 @@ function match_router($uri = ''){
 		return false;
 	}
 
-	list($c, $a) = explode('/', $current_uri);
-	list($ctrl, $act) = explode('/', $uri);
+	[$c, $a] = explode('/', $current_uri);
+	[$ctrl, $act] = explode('/', $uri);
 	if(strcasecmp($ctrl, $c) != 0){
 		return false;
 	}
@@ -145,7 +145,7 @@ function call_route($route_item, &$match_controller = null, &$match_action = nul
 		return;
 	}
 	if(is_string($route_item) && strpos($route_item, '@')){
-		list($match_controller, $match_action) = explode('@', $route_item);
+		[$match_controller, $match_action] = explode('@', $route_item);
 		if(!class_exists($match_controller)){
 			throw new RouterException("Router no found PageID:$route_item");
 		}
