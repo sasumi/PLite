@@ -16,7 +16,7 @@ use function LFPhp\Func\underscores_to_pascalcase;
 use const LFPhp\Func\EVENT_PAYLOAD_NULL;
 
 /**
- * 开始运行web服务
+ * Start web server
  */
 function start_web(){
 	try{
@@ -81,14 +81,14 @@ function start_web(){
 }
 
 /**
- * 系统内置默认响应处理器
- * 处理逻辑：
- * 1、json请求，以json返回，
- * 2、其他请求如果在路由配置里面是 Controller@Action 方式的话，尝试加载视图模板
+ * System built-in default response processor
+ * Processing logic:
+ * 1. json request, returned as json,
+ * 2. If other requests are in Controller@Action mode in the routing configuration, try to load the view template
  * @param mixed|null $data
  * @param string|null $controller
  * @param string|null $action
- * @return true|null 是否命中处理逻辑
+ * @return true|null whether the processing logic is hit
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_response_handle($data = null, $controller = null, $action = null){
@@ -96,12 +96,12 @@ function default_response_handle($data = null, $controller = null, $action = nul
 		http_json_response([
 			'data'    => $data,
 			'code'    => MessageException::$CODE_DEFAULT_SUCCESS,
-			'message' => '成功',
+			'message' => 'success',
 		]);
 		return true;
 	}
 
-	//自动模板
+	//auto template
 	if($controller && $action){
 		$ctrl = get_class_without_namespace($controller);
 		$tpl = strtolower("$ctrl/$action.php");
@@ -111,19 +111,18 @@ function default_response_handle($data = null, $controller = null, $action = nul
 		}
 	}
 }
-
 /**
- * 系统内置异常处理器
- * 处理逻辑：
- * 1、不支持 json 响应格式，会自动检测模板
- * 2、只有 MessageException 才输出data，其他 Exception 均只输出 message 和 code
- * 3、RouterException
- * 注意：不中断其他异常事件处理，如果系统有其他异常记录函数，需要自行区分 MessageException 的情况。
+ * System built-in exception handler
+ * Processing logic:
+ * 1. Does not support json response format, automatically detects template
+ * 2. Only MessageException outputs data, other Exceptions only output message and code
+ * 3. RouterException
+ * Note: Do not interrupt other exception event processing. If the system has other exception recording functions, you need to distinguish the MessageException situation yourself.
  * @param \Exception $e
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function default_exception_handle(Exception $e){
-	//不支持JSON响应的访问
+	//no support json access
 	if(!http_request_accept_json()){
 		if($e instanceof MessageException){
 			if(page_exists(PLITE_PAGE_MESSAGE)){
@@ -147,13 +146,13 @@ function default_exception_handle(Exception $e){
 		echo $e->getMessage();
 		return;
 	}
-	//避免一般exception code = 0 情况
+	//Avoid general exception code = 0 situation
 	$msg_code = $e->getCode();
 	if(!$msg_code && !($e instanceof MessageException)){
 		$msg_code = MessageException::$CODE_DEFAULT_ERROR;
 	}
 
-	//支持JSON响应
+	//json request supported
 	http_json_response([
 		'code'        => $msg_code,
 		'message'     => $e->getMessage(),
@@ -164,7 +163,7 @@ function default_exception_handle(Exception $e){
 }
 
 /**
- * 设置应用环境标志
+ * set application environment
  * @param $app_env
  */
 function set_app_env($app_env){
@@ -172,7 +171,7 @@ function set_app_env($app_env){
 }
 
 /**
- * 获取应用环境标识
+ * get application environment
  * @return mixed
  * @throws \Exception
  */
@@ -185,7 +184,7 @@ function get_app_env(){
 }
 
 /**
- * 获取应用变量命名
+ * get application name as variable name
  * @return string
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
@@ -196,8 +195,8 @@ function get_app_var_name(){
 }
 
 /**
- * 获取应用命名空间
- * 从应用名称中按照首字母大写方式转换，如项目：jack/project 会产生 Jack\Project 命名空间
+ * Get the application namespace
+ * Convert the first letter of the application name to uppercase, such as project: jack/project will generate Jack\Project namespace
  * @return string
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
@@ -211,7 +210,7 @@ function get_app_namespace(){
 }
 
 /**
- * 从composer.json 中获取应用名称，规范命令例如 jack/project，具体命名规则可以参考Composer官方说明
+ * Get the application name from composer.json, standard command such as jack/project, for specific naming rules, please refer to the official description of Composer
  * @return string
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
@@ -221,8 +220,8 @@ function get_app_name(){
 }
 
 /**
- * 获取应用 composer 配置
- * 环境必须通过 composer packagist 安装方式才能调用该方法
+ * Get the application composer configuration
+ * The environment must be installed through composer packagist to call this method
  * @return array
  * @throws \LFPhp\PLite\Exception\PLiteException
  */

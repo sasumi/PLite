@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "68eb1c2b5b1e519ef356cef1bdf150ce",
+    "content-hash": "240d803fb183166e92955872d68839d1",
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "1.2.20",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "c459702816138aca543c3208f58372bbef520efe"
+                "reference": "ce908b9bf6b3ec90a2051e41026db5708612836c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/c459702816138aca543c3208f58372bbef520efe",
-                "reference": "c459702816138aca543c3208f58372bbef520efe",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/ce908b9bf6b3ec90a2051e41026db5708612836c",
+                "reference": "ce908b9bf6b3ec90a2051e41026db5708612836c",
                 "shasum": ""
             },
             "require": {
@@ -25,7 +25,7 @@
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "ext-pdo": "*",
-                "php": ">=5.6"
+                "php": ">=7.1"
             },
             "require-dev": {
                 "ext-ssh2": "*",
@@ -71,20 +71,26 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/1.2.20"
+                "source": "https://github.com/sasumi/Func/tree/2.0.1"
             },
-            "time": "2024-08-05T08:17:19+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/sasumi",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-11-22T13:13:54+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "ext-json": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

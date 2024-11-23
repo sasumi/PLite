@@ -23,6 +23,6 @@
 	],
 	"require": {
 		"ext-json": "*",
-		"lfphp/func": "^1.2"
+		"lfphp/func": "^2.0"
 	}
 }

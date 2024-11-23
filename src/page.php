@@ -12,7 +12,7 @@ use function LFPhp\Func\static_version_patch;
 use function LFPhp\Func\static_version_set;
 
 /**
- * 引入页面模板
+ * Importing page templates
  * @param string $page_file
  * @param array $params
  * @param bool $as_return
@@ -45,7 +45,7 @@ function include_page($page_file, $params = [], $as_return = false){
 }
 
 /**
- * 只引入页面模板一次
+ * Importing page templates once
  * @param string $page_file
  * @param array $params
  * @return false|string|null
@@ -59,7 +59,7 @@ function include_page_once($page_file, $params = []){
 }
 
 /**
- * 检测视图文件是否存在
+ * check page file exists
  * @param string $page_file
  * @return bool
  */
@@ -69,7 +69,7 @@ function page_exists($page_file){
 }
 
 /**
- * 引入js（同时打上版本号）
+ * include js, and patch version string
  * @param string $js_src
  * @param array $attr
  * @throws \Exception
@@ -79,7 +79,7 @@ function include_js($js_src, $attr = []){
 }
 
 /**
- * 引入css（同时打上版本号）
+ * include css, and patch version string
  * @param string $css_href
  * @param array $attr
  * @throws \Exception
@@ -89,7 +89,7 @@ function include_css($css_href, $attr = []){
 }
 
 /**
- * 引入图片（同时打上版本号）
+ * include image, and patch version string
  * @param string $src
  * @param array $attr
  * @throws \Exception
@@ -100,7 +100,7 @@ function include_img($src, $attr = []){
 }
 
 /**
- * 补充网站访问目录相对路径
+ * Supplement the relative path of the website access directory
  * @param string $url_or_path
  * @return string
  */
@@ -116,7 +116,7 @@ function patch_site_path($url_or_path){
 }
 
 /**
- * 前端静态资源打版本号
+ * patch version number for front-end static resources
  * @param string $resource_file
  * @return string
  * @throws \Exception

@@ -1,188 +1,188 @@
-# PLite 轻量函数式框架
+# PLite lightweight functional framework
 
-采用函数式实现轻量化、高性能PHP开发框架。框架集成路由、控制器、配置、静态资源版本控制、引用式事件监听及触发等能力，可快速实现一个简单轻量的web系统。框架采用命名空间+常量前缀方式保护运行时不污染其他代码库，保证代码实现兼容性。
+lightweight, high-performance PHP development framework is implemented using functional methods . The framework integrates routing, controllers, configuration, static resource version control, reference event monitoring and triggering, and other capabilities to quickly implement a simple and lightweight web system. The framework uses namespace + constant prefix to protect the runtime from polluting other code bases and ensure code compatibility.
 
-## 1. 安装
+## 1. Installation
 
-### 1.1 手工安装
+### 1.1 Manual Installation
 
-请通过git克隆plite仓库下载最新版本框架代码：
+Please clone the plité repository via git to download the latest version of the framework code:
 
 ```shell
 git clone https://github.com/sasumi/PLite.git
 ```
 
-复制代码到项目代码目录，引入启动文件：
+Copy the code to the project code directory and import the startup file:
 
 ```php
 include_once "autoload.php";
 ```
 
-### 1.2 通过`composer`安装
+### 1.2 Installation via `composer`
 
-框架环境依赖：
-a. php版本≥7.1
-b. php ext-json 扩展
-c. lfphp/func 函数（自动安装）
+Framework environment dependencies:
+a. PHP version ≥ 7.1
+b. php ext-json extension
+c. lfphp/func function (automatically installed)
 
-使用Composer进行安装：
+Install using Composer:
 
 ```shell
 composer require lfphp/plite
 ```
 
-### 1.3 通过`lfphp/pls`安装
+### 1.3 Installation via `lfphp/pls`
 
-`lfphp/pls` 为plite安装脚本。脚本包含安装plite、初始化项目、ORM生成、CRUD代码生成等多项功能，推荐使用。
+`lfphp/pls` is the plité installation script. The script includes multiple functions such as plité installation, project initialization, ORM generation, CRUD code generation, etc. It is recommended to use it.
 
-安装pls：
+Installation pls:
 ```shell
 composer require lfphp/pls
 ```
 
-## 2. 基本用法
+## 2. Basic usage
 
-框架基本用法请参考 `test/DemoProject` 目录中的代码示例。
+For basic usage of the framework, please refer to the code examples in the `test/DemoProject` directory.
 
-### 2.1 配置文件
+### 2.1 Configuration File
 
-**全局控制变量**
+**Global Control Variables**
 
-除 `PLITE_APP_ROOT` 需要在项目中手工配置，其他 `PLITE_*` 常量均有缺省值。以下仅列出部分重要常量，如需了解全部常量定义，可以查阅框架代码文件：`src/defines.php` 。
+Except for `PLITE_APP_ROOT`, which needs to be manually configured in the project, other `PLITE_*` constants have default values. The following lists only some important constants. If you need to know all constant definitions, you can refer to the framework code file: `src/defines.php`.
 
-| 变量名称              | 说明                                                         | 缺省值                                    |
-| --------------------- | ------------------------------------------------------------ | ----------------------------------------- |
-| `PLITE_APP_ROOT`      | 项目运行根目录，其他相当配置文件路径逻辑一般基于该目录延展。 | 必填                                      |
-| `PLITE_SITE_ROOT`     | 站点访问URL路径，如：http://www.site.com/，当然可以简化为 `/` 绝对配置。 | `/`                                       |
-| `PLITE_CONFIG_PATH`   | 配置文件目录，提供给 `get_config()` 函数使用。为与其他php文件区分，一般采用 file.inc.php 格式命名。配置文件内部采用 return 语法返回配置值。 | ` PLITE_APP_ROOT.'/config'`               |
-| `PLITE_PAGE_PATH`     | 模板页面目录，提供给 `include_page()` 函数使用。             | `PLITE_APP_ROOT.'/src/page'`              |
-| `PLITE_PAGE_NO_FOUND` | 404 页面模板                                                 | `404.php` （放置在 `PLITE_PAGE_PATH` 下） |
-| `PLITE_PAGE_ERROR`    | 500 网站错误页面                                             | `5xx.php` （放置在 `PLITE_PAGE_PATH` 下） |
+| Variable Name | Description | Default Value |
+| -------------------------- | --------------------------------------------------------------- | ----------------------------------------------- |
+| `PLITE_APP_ROOT` | The project running root directory, other configuration file path logic is generally based on this directory extension. | Required|
+| `PLITE_SITE_ROOT` | Site access URL path, such as: http://www.site.com/, of course, can be simplified to `/` absolute configuration. | `/` |
+| `PLITE_CONFIG_PATH` | Configuration file directory, provided for use by the `get_config()` function. To distinguish it from other PHP files, it is generally named in the file.inc.php format. The configuration file uses the return syntax to return the configuration value. | `PLITE_APP_ROOT.'/config'` |
+| `PLITE_PAGE_PATH` | Template page directory, used by the `include_page()` function. | `PLITE_APP_ROOT.'/src/page'` |
+| `PLITE_PAGE_NO_FOUND` | 404 page template | `404.php` (placed under `PLITE_PAGE_PATH`) |
+| `PLITE_PAGE_ERROR` | 500 Site Error Page | `5xx.php` (placed under `PLITE_PAGE_PATH`) |
 
-**程序配置**
+**Program Configuration**
 
-框架默认配置文件目录为：`PLITE_APP_ROOT + '/config'`，可通过 `CONFIG_PATH` 重置。
-该目录下配置文件命名格式为 `config_key.inc.php` ，通过函数 `get_config('config_key')` 方式获取该配置文件return回的数据，或通过 `get_config('parent/child')` 方式直接获取到内部数组子项。
-举例：
+The framework's default configuration file directory is: `PLITE_APP_ROOT + '/config'`, which can be reset by `CONFIG_PATH`.
+The configuration file in this directory is named in the format of `config_key.inc.php`. The data returned by the configuration file can be obtained through the function `get_config('config_key')`, or the internal array sub-items can be directly obtained through the `get_config('parent/child')` method.
+Example:
 
 ```php
-//配置文件 site.inc.php 内容为：
+//The content of the configuration file site.inc.php is:
 <?php
 return [
-	'name'=>'站点1',
-    'admin' => [
-        'user'=>'jack',
-        'email'=>'jack@email.com'
-    ]
+	'name'=>'Site 1',
+'admin' => [
+'user'=>'jack',
+'email'=>'jack@email.com'
+]
 ];
 
-//获取配置方式为：
-//1、获取站点名称：
+//Get the configuration method:
+//1. Get the site name:
 $site_name = get_config('site/name');
 
-//2、获取站点管理员邮箱
+//2. Get the site administrator's email address
 $admin_email = get_config('site/admin/email');
 ```
 
-框架默认需要以下配置文件：
+The framework requires the following configuration files by default:
 
-1. `routes.inc.php` 提供网站访问路由表
-2. `static_version.inc.php` 静态资源版本配置信息（在 `include_js` 等函数总使用）
+1. `routes.inc.php` provides the website access routing table
+2. `static_version.inc.php` static resource version configuration information (always used in `include_js` and other functions)
 
-### 2.2 路由系统
-#### 2.2.1 路由配置
-URL中默认参数名称为： `r` (可通过 `PLITE_ROUTER_KEY` 重置），缺省路由通过queryString方式传参。如：www.abc.com/?r=user/info&id=1。
-框架路由配置默认为：`routes.inc.php` (可以通过 `PLITE_ROUTER_CONFIG_FILE` 重置)。
-路由配置语法为：
+### 2.2 Routing System
+#### 2.2.1 Routing Configuration
+The default parameter name in the URL is: `r` (can be reset by `PLITE_ROUTER_KEY`), and the default route is passed in queryString. For example: www.abc.com/?r=user/info&id=1.
+The framework's routing configuration defaults to: `routes.inc.php` (can be reset via `PLITE_ROUTER_CONFIG_FILE`).
+The route configuration syntax is:
 
 ```php
 return [
-    //模式① URI匹配 => 类名+'@'+方法名称
-    '' => IndexController::class.'@index',
-    'user/create' => UserController::class.'@create',
+//Mode ① URI matching => class name + '@' + method name
+'' => IndexController::class.'@index',
+'user/create' => UserController::class.'@create',
         
-    //模式② 包含通配符 URI字符串 => 类名+'@'+方法名称，或通配符
-    'product/*' => UserController::class.'@*',
+//Mode ② contains wildcard URI string => class name + '@' + method name, or wildcard
+'product/*' => UserController::class.'@*',
 ]
 ```
-#### 2.2.2 路由系统使用
-```php 
+#### 2.2.2 Routing System Usage
+```php
 
 //?r=user/create
-echo url('user/create'); //生成一条创建用户的URL路由
+echo url('user/create'); //Generate a URL route to create a user
 
 //<input name="r" value="user/update"/>
 //<input name="id" value="1"/>
-echo url_input('user/update', ['id'=>1]); //生成一串用于更新用户1信息的html input字符串
+echo url_input('user/update', ['id'=>1]); //Generate an HTML input string for updating user 1 information
 ```
 
-#### 2.2.3 路由重写
+#### 2.2.3 Route Rewriting
 
-请参考 [路由重写规则说明](REWRITE.md) 文档。
+Please refer to the [routing rewrite rules description](REWRITE.md) document.
 
-### 2.3 控制器
+### 2.3 Controller
 
-框架控制器无任何限制，任何类、方法都可以注册成为控制器。当然，使用过程建议设计项目控制器父类，方便对一些统一行为（如鉴权、统一日志等）进行处理。路由器中 `$_REQUEST` 参数会被当成第一个参数传递给 `action` 方法。
+There are no restrictions on framework controllers. Any class or method can be registered as a controller. Of course, it is recommended to design a project controller parent class during use to facilitate the processing of some unified behaviors (such as authentication, unified logging, etc.). The `$_REQUEST` parameter in the router will be passed as the first parameter to the `action` method.
 
 ```php
-//推荐 Controller 模型
+//Recommend Controller model
 
 /**
- * Controller 为公共定义的共同父类，方便在 Controller::__construct() 方法中实现统一逻辑处理
- */
+* Controller is a common parent class defined by the public, which is convenient for implementing unified logic processing in the Controller::__construct() method
+*/
 class Order extends Controller {
-    use AuthorizedTrait; //推荐建立 trait 来实现类似鉴权等能力
+use AuthorizedTrait; //It is recommended to create traits to implement capabilities such as authentication
     
-    /**
-     * @param array $request //框架路由机制统一传递 $_REQUEST 变量到 action方法中
-     */
-    public function index($request){
-        self::noVisited();
-        var_dump($request['hello']);
-    }
+/**
+* @param array $request //The framework routing mechanism uniformly passes the $_REQUEST variable to the action method
+*/
+public function index($request){
+self::noVisited();
+var_dump($request['hello']);
+}
     
-    /**
-     * 静态方法不会被路由访问到
-     */
-    public static function noVisited(){
+/**
+* Static methods will not be accessed by routing
+*/
+public static function noVisited(){
         
-    }    
+}
 }
 ```
 
-### 2.4 视图
+### 2.4 Views
 
-框架支持 `include_page` 函数引入php模板文件。
-页面目录默认为：`APP_ROOT+/src/page` 可通过 `PLITE_PAGE_PATH` 重置。
-使用方法：
+The framework supports the `include_page` function to introduce PHP template files.
+The page directory defaults to: `APP_ROOT+/src/page` and can be reset by `PLITE_PAGE_PATH`.
+Directions:
 
 ```php
-include_page('user/info.php', ['id'=>1]); //标识引入 src/page/user/info.php 文件，同时传递参数到文件内部。
+include_page('user/info.php', ['id'=>1]); //Introduce the src/page/user/info.php file and pass the parameters to the file.
 ```
 
-## 3. 框架运行时事件
+## 3. Framework runtime events
 
-框架运行过程支持通过注册事件 `event_register($event, $payload)` 实现对关键事件进行自定义处理。框架支持事件列表有：
+custom processing of key events by registering events `event_register($event, $payload)`. The framework supports the following events:
 
-| 事件key               | 事件描述 | 回调函数参数说明 |
-| --------------------- | -------- | ---------------- |
-| EVENT_APP_START    | web程序运行开始（环境变量已经配置完成） | 无 |
-| EVENT_APP_BEFORE_EXEC    | controller执行前 | 参数1：命中控制器（简称）<br />参数2：命中动作（不区分大小写） |
-| EVENT_APP_EXECUTED    | controller执行完成 | 参数1：执行结果返回参数<br />参数2：命中控制器（简称）<br />参数3：命中动作（不区分大小写） |
-| EVENT_APP_FINISHED    | web程序运行结束 | 无 |
-| EVENT_APP_EXCEPTION    | web程序运行异常 | 参数1：异常 Exception 对象<br />参数2：命中控制器（简称）<br />参数3：命中动作（不区分大小写） |
-| EVENT_ROUTER_HIT    | 路由命中（web框架可以直接在路由配置中执行代码，无需controller） | 参数1：命中路由项目（字符串、闭包函数、通配符） |
-| EVENT_ROUTER_URL    | `url()` 路由生成函数执行 | 参数1：生成url<br />参数2：输入URI<br />参数3：输入参数数组 |
-| EVENT_BEFORE_INCLUDE_PAGE    | `include_page()` 函数执行开始（web模式默认C/A 执行结果会包含页面） | 参数1：模板文件相对路径<br />参数2：输入参数数组 |
-| EVENT_AFTER_INCLUDE_PAGE    | `include_page()` 函数执行结束（web模式默认C/A 执行结果会包含页面） | 参数1：模板文件绝对路径<br />参数2：输入参数数组 |
+| Event key | Event description | Callback function parameter description |
+| -------------------------- | -------- | ------------- |
+| EVENT_APP_START | The web program starts running (environment variables have been configured) | None |
+| EVENT_APP_BEFORE_EXEC | Before controller execution | Parameter 1: hit controller (short name)<br />Parameter 2: hit action (case insensitive) |
+| EVENT_APP_EXECUTED | controller execution completed | Parameter 1: Execution result return parameter<br />Parameter 2: Hit controller (abbreviation)<br />Parameter 3: Hit action (case insensitive) |
+| EVENT_APP_FINISHED | The web application has finished running | None |
+| EVENT_APP_EXCEPTION | web program running abnormally | Parameter 1: Exception object<br />Parameter 2: hit controller (abbreviation)<br />Parameter 3: hit action (case insensitive) |
+| EVENT_ROUTER_HIT | Route hit (web framework can execute code directly in route configuration without controller) | Parameter 1: hit route item (string, closure function, wildcard) |
+| EVENT_ROUTER_URL | `url()` route generation function execution | Parameter 1: generate url<br /> Parameter 2: input URI<br /> Parameter 3: input parameter array |
+| EVENT_BEFORE_INCLUDE_PAGE | `include_page()` function execution starts (the default C/A execution result in web mode will include the page) | Parameter 1: relative path of template file<br />Parameter 2: input parameter array |
+| EVENT_AFTER_INCLUDE_PAGE | `include_page()` function execution ends (the default C/A execution result in web mode will include the page) | Parameter 1: template file absolute path<br />Parameter 2: input parameter array |
 
-## 4. 版权声明
+## 4. Copyright Notice
 
-框架采用 `MIT` 版权声明，请在使用过程遵守该版权声明。
+The framework adopts the `MIT` copyright statement. Please abide by the copyright statement during use.
 
-## 5. 其他
+## 5. Others
 
-框架仅为轻量路由框架，建议在有需求情况，配合以下框架使用：
-① `PORM` PHP ORM库（`lfphp/porm`）
-② `Logger` PHP 日志库 （`lfphp/logger`）
-③ `Cache` PHP 缓存库 (`lfphp/cache`)
+The framework is only a lightweight routing framework. It is recommended to use it with the following frameworks when necessary:
+① `PORM` PHP ORM library (`lfphp/porm`)
+② `Logger` PHP log library (`lfphp/logger`)
+③ `Cache` PHP cache library (`lfphp/cache`)

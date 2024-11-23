@@ -3,32 +3,32 @@ namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\RouterException;
 use ReflectionClass;
-use function LFPhp\Func\array_clear_null;
+use function LFPhp\Func\array_clean_null;
 use function LFPhp\Func\event_fire;
 use function LFPhp\Func\html_tag_hidden;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\is_url;
 
 /**
- * URL 路由函数
- * @param string $uri URI 字符串，一般为 ctrl/act 格式。如果系统复杂，也可以是多段命名空间等。
+ * URL routing function
+ * @param string $uri URI string, usually in ctrl/act format. If the system is complex, it can also be a multi-segment namespace, etc.
  * @param array $params
  * @param false $force_exists
  * @return string
  * @example
- * url('article/index') //表示生成一条索引到 article controller, index方法的url
+ * url('article/index') // indicates the generation of a url indexing to the article controller, index method
  * @throws \LFPhp\PLite\Exception\PLiteException
  * @throws \LFPhp\PLite\Exception\RouterException
  */
 function url($uri = '', $params = [], $force_exists = false){
 	if($force_exists){
-		//todo 这里缺少通配符比较
+		//todo There is no wildcard comparison here
 		$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 		if(!isset($routes[$uri])){
 			throw new RouterException('Router no found:'.$uri);
 		}
 	}
-	$params = array_clear_null($params);
+	$params = array_clean_null($params);
 	$ps = $params ? '&'.http_build_query($params) : '';
 	$url = PLITE_SITE_ROOT."?".PLITE_ROUTER_KEY."=$uri".$ps;
 	event_fire(EVENT_ROUTER_URL, $url, $uri, $params);
@@ -36,15 +36,15 @@ function url($uri = '', $params = [], $force_exists = false){
 }
 
 /**
- * 根据uri、params 生成 html hidden 表单字段
- * 一般在 GET 类型的form中，需要额外提交 input:hidden 表单项来传递uri信息
+ * Generate html hidden form fields based on uri and params
+ * Generally, in a GET type form, you need to submit an additional input:hidden form item to pass the uri information
  * @param string $uri
  * @param array $params
  * @return string
  */
 function url_input($uri, $params = []){
 	$html = html_tag_hidden(PLITE_ROUTER_KEY, $uri);
-	$params = array_clear_null($params);
+	$params = array_clean_null($params);
 	foreach($params as $k => $v){
 		$html .= html_tag_hidden($k, $v);
 	}
@@ -52,9 +52,9 @@ function url_input($uri, $params = []){
 }
 
 /**
- * 使用新的参数替换指定URI
+ * Replace the specified URI with new parameters
  * @param string $uri
- * @param array $replace_map 替换变量组映射 [变量名 => 新变量值,...]  当新变量值为 null 时，做删除处理
+ * @param array $replace_map replace variable group mapping [variable name => new variable value,...] When the new variable value is null, delete it
  * @return string
  */
 function url_replace($uri, $replace_map = []){
@@ -70,8 +70,8 @@ function url_replace($uri, $replace_map = []){
 }
 
 /**
- * 使用新的参数替换当前uri参数部分
- * @param array $replace_map 替换变量组映射 [变量名 => 新变量值,...]  当新变量值为 null 时，做删除处理
+ * Replace the current uri parameter part with the new parameter
+ * @param array $replace_map replace variable group mapping [variable name => new variable value,...] When the new variable value is null, delete it
  * @return string
  */
 function url_replace_current($replace_map = []){
@@ -80,7 +80,7 @@ function url_replace_current($replace_map = []){
 }
 
 /**
- * 设置覆盖路由信息（包括覆盖 $_GET, $_REQUEST
+ * Set override routing information (including override $_GET, $_REQUEST)
  * @param string $uri
  * @param array $params
  * @return void
@@ -95,7 +95,7 @@ function set_router($uri, $params = []){
 }
 
 /**
- * 获取当前路由URI
+ * Get the current route URI
  * @return string
  */
 function get_router(){
@@ -103,7 +103,7 @@ function get_router(){
 }
 
 /**
- * 检测当前路由是否匹配指定URI
+ * Checks whether the current route matches the specified URI
  * @param string $uri
  * @return bool
  */
@@ -128,7 +128,7 @@ function match_router($uri = ''){
 }
 
 /**
- * @param string|callable $route_item 路由规则，支持格式：1、函数；2、Class@method \格式字符串；3、URL跳转字符串
+ * @param string|callable $route_item Routing rules, supported formats: 1. Function; 2. Class method format string; 3. URL jump string
  * @param null $match_controller
  * @param null $match_action
  * @return bool|mixed|void

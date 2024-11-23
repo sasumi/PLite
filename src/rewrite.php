@@ -1,12 +1,13 @@
 <?php
 namespace LFPhp\PLite;
 
+use Exception;
 use function LFPhp\Func\event_register;
 
 const PATTERN_HOLDER = 'PATTERN_HOLDER';
 
 /**
- * 将 str 中的 $1, $2 替换成相应 matches 数组中对应下标的数据
+ * Replace $1, $2 in str with the corresponding index data in the matches array
  * @param string $str
  * @param string[] $ms
  * @return string
@@ -19,12 +20,12 @@ function __reg_var_replace($str, $ms = []){
 }
 
 /**
- * 从规则模板 $1/$2 结合给定URI： ctrl/act 生成替换数组：['$1'=>'ctrl', '$2'=> 'act']
- * 规则模板可以是 $1/$2，ctrl/$2， path/$1/act 等格式，如果格式不匹配，返回空数组
+ * Generate replacement array from rule template $1/$2 combined with given URI: ctrl/act: ['$1'=>'ctrl', '$2'=> 'act']
+ * Rule template can be in the format of $1/$2, ctrl/$2, path/$1/act, etc. If the format does not match, an empty array is returned
  * @param string $uri_pattern
  * @param string $uri
- * @param array $replacement 用来替换占位符的映射数组
- * @return bool 是否匹配
+ * @param array $replacement Mapping array used to replace placeholders
+ * @return bool whether it matches
  */
 function __rewrite_match_uri($uri_pattern, $uri, &$replacement = []){
 	if(strcasecmp($uri_pattern, $uri) === 0){
@@ -43,39 +44,39 @@ function __rewrite_match_uri($uri_pattern, $uri, &$replacement = []){
 }
 
 /**
- * 绑定 url() 函数 结合给定重写映射规则生成最终URL
- * @param array $mapping mapping 规则请参考 [/REWRITE.md](REWRITE.md)
+ * Bind url() function to generate final URL based on given rewrite mapping rules
+ * @param array $mapping For mapping rules, please refer to [/REWRITE.md](REWRITE.md)
  * @return void
  */
 function rewrite_bind_url($mapping){
 	event_register(EVENT_ROUTER_URL, function(&$url, $uri, $param) use ($mapping){
-		foreach($mapping as $url_pattern => list($uri_pattern, $param_pattern)){
-			//格式为：
+		foreach($mapping as $url_pattern => [$uri_pattern, $param_pattern]){
+			//The format is:
 			// '$1' => 'value1'
 			// '$2' => 'value2'
-			// 可以从 _uri 规则，或者 $_param 规则中获取
-			// 从规则 $1/$2 结合给定URI： ctrl/act 生成替换数组：['$1'=>'ctrl', '$2'=> 'act']
+			// Can be obtained from the _uri rule or the $_param rule
+			// Combine the given URI from the rule $1/$2: ctrl/act to generate a replacement array: ['$1'=>'ctrl', '$2'=> 'act']
 			$replacement = [];
-			$match_param_keys = []; //已经匹配的param key, 剩余未替换变量，统一补充到尾部成为 query string
+			$match_param_keys = []; //The matched param key and the remaining unreplaced variables are added to the end to form the query string.
 			if(__rewrite_match_uri($uri_pattern, $uri, $replacement)){
 				foreach($param_pattern ?: [] as $k => $holder){
 					if(!isset($param[$k])){
-						//参数不满足，匹配下一个规则
+						//The parameters are not satisfied, match the next rule
 						continue 2;
 					}
 					$replacement[$holder] = $param[$k];
 					$match_param_keys[] = $k;
 				}
 
-				//表达式转换成占位符模式，
-				//如：{W}/{W}.html
+				//Convert the expression into placeholder mode,
+				//For example: {W}/{W}.html
 				$idx = 0;
 				$url = preg_replace_callback('/{\w+}/', function() use (&$idx, $replacement){
 					$replace_key = '$'.(++$idx);
 					return isset($replacement[$replace_key]) ? urlencode($replacement[$replace_key]) : '';
 				}, $url_pattern);
 
-				//剩余参数补充到query string
+				//The remaining parameters are added to the query string
 				$ext_param = $param;
 				unset($ext_param[PLITE_ROUTER_KEY]);
 				foreach($match_param_keys as $k){
@@ -84,7 +85,7 @@ function rewrite_bind_url($mapping){
 				if($ext_param){
 					$url .= (strpos($url, '?') !== false ? '&' : '?').http_build_query($ext_param);
 				}
-				//清理掉没用的 {}
+				//Clean up the unused {}
 				if(preg_match('/{\w+}/', $url)){
 					$url = preg_replace('/{\w+}/', '', $url);
 				}
@@ -98,20 +99,20 @@ function rewrite_bind_url($mapping){
 }
 
 /**
- * 处理当前请求path info
- * @param array $mapping mapping 规则请参考 [/REWRITE.md](REWRITE.md)
+ * Process the current request path info
+ * @param array $mapping For mapping rules, please refer to [/REWRITE.md](REWRITE.md)
  * @param string|null $path_info
- * @return bool 是否命中规则
+ * @return bool Whether the rule is hit
  * @throws \Exception
  */
 function rewrite_resolve_path($mapping, $path_info = null){
-	//解析识别当前访问URL
+	//Parse and identify the currently accessed URL
 	$path_info = $path_info === null ? $_SERVER['PATH_INFO'] : $path_info;
 	$path_info = trim($path_info, '/');
-	foreach($mapping as $url_pattern => list($uri_pattern, $param_pattern)){
-		//直接写死URL方式
+	foreach($mapping as $url_pattern => [$uri_pattern, $param_pattern]){
+		//hardcode URL
 		if(!preg_match_all('/{(\w+)}/', $url_pattern, $all_matches)){
-			//当前页面地址包含规则地址
+			//The current page address contains the rule address
 			if(stripos($path_info, $url_pattern) === 0){
 				$ps = array_merge($_GET, $param_pattern ?: []);
 				set_router($uri_pattern, $ps);
@@ -121,7 +122,7 @@ function rewrite_resolve_path($mapping, $path_info = null){
 			}
 		}
 
-		//将 {w} {d} 更换成真正的正则表达式
+		//replace {w} {d} to regexp
 		$idx = 0;
 		$url_regexp = preg_replace_callback("/".PATTERN_HOLDER."/", function() use (&$idx, $all_matches){
 			$flag = strtolower($all_matches[1][$idx++]);
@@ -131,11 +132,11 @@ function rewrite_resolve_path($mapping, $path_info = null){
 				case 'd':
 					return '(\d+)';
 				default:
-					throw new \Exception("Pattern flag no support: ".$flag);
+					throw new Exception("Pattern flag no support: ".$flag);
 			}
 		}, preg_quote(preg_replace('/{\w+}/', PATTERN_HOLDER, $url_pattern)));
 
-		//从开始对比
+		//start compare
 		$url_regexp = "#^$url_regexp#u";
 		if(preg_match($url_regexp, $path_info, $ms)){
 			$uri = __reg_var_replace($uri_pattern, $ms);
@@ -153,16 +154,16 @@ function rewrite_resolve_path($mapping, $path_info = null){
 }
 
 /**
- * 通过 pathinfo 设置路由映射
- * @param array $mapping mapping 规则请参考 [/REWRITE.md](REWRITE.md)
- * @param string|null $path_info pathinfo 信息，缺省由 $_SERVER['PATH_INFO'] 中获取
+ * Set route mapping through pathinfo
+ * @param array $mapping For mapping rules, please refer to [/REWRITE.md](REWRITE.md)
+ * @param string|null $path_info pathinfo information, by default obtained from $_SERVER['PATH_INFO']
  * @return void
  * @throws \Exception
  */
 function rewrite_setup($mapping, $path_info = null){
-	//1. 绑定 url() 函数
+	//1. bind url()
 	rewrite_bind_url($mapping);
 
-	//2. 处理当前请求
+	//2. process current request
 	rewrite_resolve_path($mapping, $path_info);
 }

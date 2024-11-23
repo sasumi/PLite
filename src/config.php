@@ -3,12 +3,11 @@ namespace LFPhp\PLite;
 
 use LFPhp\PLite\Exception\PLiteException as Exception;
 use function LFPhp\Func\array_get;
-
 /**
- * 获取配置文件配置值
- * 配置文件路径由 PLITE_CONFIG_PATH 指定，配置文件格式为 file.inc.php，文件返回关联数组
- * @param string $config_key_uri 配置名称/路径
- * @param bool $ignore_on_file_no_exists 是否忽略文件不存在情况（缺省为必须强制文件存在）
+ * Get configuration value of configuration file
+ * The configuration file path is specified by PLITE_CONFIG_PATH, the configuration file format is file.inc.php, and the file returns an associative array
+ * @param string $config_key_uri configuration name/path
+ * @param bool $ignore_on_file_no_exists whether to ignore the situation where the file does not exist (the default is to force the file to exist)
  * @return array|mixed
  * @throws \Exception
  */
