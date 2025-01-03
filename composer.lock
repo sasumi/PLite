@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "lfphp/func",
-            "version": "2.0.1",
+            "version": "2.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sasumi/Func.git",
-                "reference": "ce908b9bf6b3ec90a2051e41026db5708612836c"
+                "reference": "4940c095c7ac7e3fed406c11868ee66798e7dac2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sasumi/Func/zipball/ce908b9bf6b3ec90a2051e41026db5708612836c",
-                "reference": "ce908b9bf6b3ec90a2051e41026db5708612836c",
+                "url": "https://api.github.com/repos/sasumi/Func/zipball/4940c095c7ac7e3fed406c11868ee66798e7dac2",
+                "reference": "4940c095c7ac7e3fed406c11868ee66798e7dac2",
                 "shasum": ""
             },
             "require": {
@@ -71,7 +71,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sasumi/Func/issues",
-                "source": "https://github.com/sasumi/Func/tree/2.0.1"
+                "source": "https://github.com/sasumi/Func/tree/2.0.17"
             },
             "funding": [
                 {
@@ -79,7 +79,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-22T13:13:54+00:00"
+            "time": "2025-01-03T08:02:24+00:00"
         }
     ],
     "packages-dev": [],
