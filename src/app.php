@@ -9,6 +9,7 @@ use LFPhp\PLite\Exception\RouterException;
 use function LFPhp\Func\event_fire;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\http_from_json_request;
+use function LFPhp\Func\http_get_current_page_url;
 use function LFPhp\Func\http_json_response;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_request_accept_json;
@@ -27,7 +28,8 @@ function start_web(){
 			$wildcard = '*';
 			$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 
-			event_fire(EVENT_APP_START);
+			$url = http_get_current_page_url();
+			event_fire(EVENT_APP_START, $url);
 
 			//fix json
 			if(http_from_json_request()){
@@ -56,7 +58,7 @@ function start_web(){
 			}
 
 			//存在通配符规则
-			list($req_ctrl, $req_act) = explode('/', $req_route);
+			[$req_ctrl, $req_act] = explode('/', $req_route);
 			if($routes["$req_ctrl/$wildcard"]){
 				$matched_route_item = $routes["$req_ctrl/$wildcard"];
 				//命中规则存在通配符，则使用请求中的action
