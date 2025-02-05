@@ -9,9 +9,9 @@ class RouterException extends PLiteException {
 	public function __construct($message = "", $code = null, Throwable $previous = null){
 		parent::__construct($message, $code, $previous);
 		$this->data = [
-			'current_url' => http_get_current_page_url(),
-			'client_ip'   => get_client_ip(),
-			'user_agent'  => $_SERVER['HTTP_USER_AGENT'],
+			'url'        => http_get_current_page_url(),
+			'client_ip'  => get_client_ip(),
+			'user_agent' => $_SERVER['HTTP_USER_AGENT'],
 		];
 	}
 }
