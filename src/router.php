@@ -6,6 +6,7 @@ use ReflectionClass;
 use function LFPhp\Func\array_clean_null;
 use function LFPhp\Func\event_fire;
 use function LFPhp\Func\html_tag_hidden;
+use function LFPhp\Func\http_get_current_page_url;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\is_url;
 
@@ -152,7 +153,7 @@ function call_route($route_item, &$match_controller = null, &$match_action = nul
 		//是否存在 __call 方法
 		$call_method_exists = method_exists($match_controller, '__call');
 		if(!method_exists($match_controller, $match_action) && !$call_method_exists){
-			throw new RouterException('Action no found PageID:'.$route_item);
+			throw new RouterException("Action no found(r:$route_item)");
 		}
 		$rc = new ReflectionClass($match_controller);
 

@@ -112,7 +112,9 @@ function default_response_handle($data = null, $controller = null, $action = nul
 			return true;
 		}
 	}
+	return null;
 }
+
 /**
  * System built-in exception handler
  * Processing logic:

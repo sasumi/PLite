@@ -6,10 +6,9 @@ use JsonSerializable;
 use Throwable;
 
 class MessageException extends PLiteException implements JsonSerializable {
-	public $data;
 	public $forward_url;
-	public static $CODE_DEFAULT_SUCCESS = 0; //默认成功码
-	public static $CODE_DEFAULT_ERROR = -1; //默认失败码
+	public static $CODE_DEFAULT_SUCCESS = 0;
+	public static $CODE_DEFAULT_ERROR = -1;
 
 	/**
 	 * @param string $message
@@ -26,7 +25,7 @@ class MessageException extends PLiteException implements JsonSerializable {
 	}
 
 	/**
-	 * 成功message
+	 * make success message
 	 * @param $data
 	 * @param string $message
 	 * @param string $forward_url
@@ -37,6 +36,7 @@ class MessageException extends PLiteException implements JsonSerializable {
 	}
 
 	/**
+	 * make error message
 	 * @param $message
 	 * @param null $code
 	 * @param null $data
@@ -47,31 +47,14 @@ class MessageException extends PLiteException implements JsonSerializable {
 		return new self($message, $code, $data);
 	}
 
+	/**
+	 * patch forward_url data
+	 * @return array
+	 */
 	public function toArray(){
-		return [
-			'code'        => $this->getCode(),
-			'message'     => $this->getMessage(),
-			'data'        => $this->getData(),
-			'forward_url' => $this->getData(),
-		];
-	}
-
-	public function jsonSerialize(){
-		return $this->toArray();
-	}
-
-	/**
-	 * @return mixed|null
-	 */
-	public function getData(){
-		return $this->data;
-	}
-
-	/**
-	 * @param mixed|null $data
-	 */
-	public function setData($data): void{
-		$this->data = $data;
+		$exp = parent::toArray();
+		$exp['forward_url'] = $this->getForwardUrl();
+		return $exp;
 	}
 
 	/**
