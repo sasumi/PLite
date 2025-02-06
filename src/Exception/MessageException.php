@@ -7,6 +7,10 @@ use Throwable;
 
 class MessageException extends PLiteException implements JsonSerializable {
 	public $forward_url;
+
+	public static $MESSAGE_DEFAULT_SUCCESS = 'success';
+	public static $MESSAGE_DEFAULT_ERROR = 'error';
+
 	public static $CODE_DEFAULT_SUCCESS = 0;
 	public static $CODE_DEFAULT_ERROR = -1;
 
@@ -31,7 +35,10 @@ class MessageException extends PLiteException implements JsonSerializable {
 	 * @param string $forward_url
 	 * @return \LFPhp\PLite\Exception\MessageException
 	 */
-	public static function successData($data, $message = 'success', $forward_url = ''){
+	public static function successData($data, $message = null, $forward_url = ''){
+		if($message === null){
+			$message = self::$MESSAGE_DEFAULT_SUCCESS;
+		}
 		return new self($message, self::$CODE_DEFAULT_SUCCESS, $data, $forward_url);
 	}
 
@@ -58,6 +65,7 @@ class MessageException extends PLiteException implements JsonSerializable {
 	}
 
 	/**
+	 * get forward url
 	 * @return string
 	 */
 	public function getForwardUrl(){
@@ -65,7 +73,8 @@ class MessageException extends PLiteException implements JsonSerializable {
 	}
 
 	/**
-	 * @param mixed $forward_url
+	 * set forward url
+	 * @param string $forward_url
 	 */
 	public function setForwardUrl($forward_url): void{
 		$this->forward_url = $forward_url;

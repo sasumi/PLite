@@ -33,9 +33,6 @@ if(!defined('PLITE_APP_ROOT')){
 //ENV KEY
 !defined('PLITE_SERVER_APP_ENV_KEY') && define('PLITE_SERVER_APP_ENV_KEY', 'APP_ENV');
 
-//Message error page (pass in exception variable)
-!defined('PLITE_PAGE_MESSAGE') && define('PLITE_PAGE_MESSAGE', 'message.php');
-
 //404 page (pass in exception variable)
 !defined('PLITE_PAGE_NO_FOUND') && define('PLITE_PAGE_NO_FOUND', '404.php');
 

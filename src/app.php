@@ -13,14 +13,20 @@ use function LFPhp\Func\http_get_current_page_url;
 use function LFPhp\Func\http_json_response;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\http_request_accept_json;
+use function LFPhp\Func\instanceof_list;
+use function LFPhp\Func\register_error2exception;
 use function LFPhp\Func\underscores_to_pascalcase;
 use const LFPhp\Func\EVENT_PAYLOAD_NULL;
 
 /**
  * Start web server
  */
-function start_web(){
+function start_web($pre_handler = null){
 	try{
+		register_error2exception(E_ALL ^ E_NOTICE);
+		if($pre_handler){
+			call_user_func($pre_handler);
+		}
 		for(; ;){
 			$match_controller = null;
 			$match_action = null;
@@ -42,7 +48,7 @@ function start_web(){
 						foreach($obj as $k => $val){
 							if($is_post){
 								$_POST[$k] = $val;
-							} else if($is_get){
+							}else if($is_get){
 								$_GET[$k] = $val;
 							}
 							$_REQUEST[$k] = $val;
@@ -72,13 +78,18 @@ function start_web(){
 			throw new RouterException("Router no found");
 		}
 		event_fire(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
-	}catch(Exception $e){
-		$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
-		if($r === EVENT_PAYLOAD_NULL){
-			throw $e; //未处理过任何异常，继续往上抛
-		}
-	}finally{
 		event_fire(EVENT_APP_FINISHED);
+	}catch(Exception $e){
+		try{
+			$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
+			//none exception handle, throw continue
+			if($r === EVENT_PAYLOAD_NULL){
+				throw $e;
+			}
+		}catch(Exception $e){
+			echo $e->getMessage();
+			error_log($e->getMessage());
+		}
 	}
 }
 
@@ -87,19 +98,28 @@ function start_web(){
  * Processing logic:
  * 1. json request, returned as json,
  * 2. If other requests are in Controller@Action mode in the routing configuration, try to load the view template
- * @param mixed|null $data
+ * @param array $response_data
  * @param string|null $controller
  * @param string|null $action
- * @return true|null whether the processing logic is hit
+ * @return bool whether the processing logic is hit
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
-function default_response_handle($data = null, $controller = null, $action = null){
+function default_response_handle($response_data = [], $controller = null, $action = null){
+	$response_data = array_merge([
+		'code'        => MessageException::$CODE_DEFAULT_SUCCESS,
+		'message'     => MessageException::$MESSAGE_DEFAULT_SUCCESS,
+		'data'        => null,
+		'forward_url' => '',
+	], $response_data);
+
 	if(http_request_accept_json()){
-		http_json_response([
-			'data'    => $data,
-			'code'    => MessageException::$CODE_DEFAULT_SUCCESS,
-			'message' => 'success',
-		]);
+		http_json_response($response_data);
+		return true;
+	}
+
+	//standard page visit
+	if($response_data['forward_url']){
+		http_redirect($response_data['forward_url']);
 		return true;
 	}
 
@@ -108,7 +128,7 @@ function default_response_handle($data = null, $controller = null, $action = nul
 		$ctrl = get_class_without_namespace($controller);
 		$tpl = strtolower("$ctrl/$action.php");
 		if(page_exists($tpl)){
-			include_page($tpl, $data);
+			include_page($tpl, $response_data['data']);
 			return true;
 		}
 	}
@@ -123,47 +143,42 @@ function default_response_handle($data = null, $controller = null, $action = nul
  * 3. RouterException
  * Note: Do not interrupt other exception event processing. If the system has other exception recording functions, you need to distinguish the MessageException situation yourself.
  * @param \Exception $e
+ * @param string[] $asNormalExceptions
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
-function default_exception_handle(Exception $e){
-	//no support json access
-	if(!http_request_accept_json()){
-		if($e instanceof MessageException){
-			if(page_exists(PLITE_PAGE_MESSAGE)){
-				include_page(PLITE_PAGE_MESSAGE, ['exception' => $e]);
-				return;
-			}
-			if($forward_url = $e->getForwardUrl()){
-				http_redirect($forward_url);
-			}
-			echo $e->getMessage();
-			return;
-		}
-		if($e instanceof RouterException && page_exists(PLITE_PAGE_NO_FOUND)){
-			include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
-			return;
-		}
-		if(page_exists(PLITE_PAGE_ERROR)){
-			include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
-			return;
-		}
-		echo $e->getMessage();
-		return;
-	}
+function default_exception_handle(Exception $e, $asNormalExceptions = []){
+	$forward_url = method_exists($e, 'getForwardUrl') ? $e->getForwardUrl() : '';
+	$asNormalExceptions[] = MessageException::class;
+
 	//Avoid general exception code = 0 situation
-	$msg_code = $e->getCode();
-	if(!$msg_code && !($e instanceof MessageException)){
-		$msg_code = MessageException::$CODE_DEFAULT_ERROR;
+	$code_fixed = $e->getCode();
+	if(!$code_fixed && !($e instanceof MessageException)){
+		$code_fixed = MessageException::$CODE_DEFAULT_ERROR;
 	}
 
-	//json request supported
-	http_json_response([
-		'code'        => $msg_code,
-		'message'     => $e->getMessage(),
-		'forward_url' => $e instanceof MessageException ? $e->getForwardUrl() : '',
-		'data'        => $e instanceof MessageException ? $e->getData() : null,
-	]);
-	return;
+	//force response json while request accept json
+	if(instanceof_list($e, $asNormalExceptions)){
+		default_response_handle([
+			'code'        => $code_fixed,
+			'message'     => $e->getMessage(),
+			'forward_url' => $forward_url,
+			'data'        => method_exists($e, 'getData') ? $e->getData() : null,
+		]);
+		return;
+	}
+
+	if($e instanceof RouterException && page_exists(PLITE_PAGE_NO_FOUND)){
+		include_page(PLITE_PAGE_NO_FOUND, ['exception' => $e]);
+		return;
+	}
+	if(page_exists(PLITE_PAGE_ERROR)){
+		include_page(PLITE_PAGE_ERROR, ['exception' => $e]);
+		return;
+	}
+	echo $e->getMessage();
+	if($forward_url){
+		http_redirect($forward_url);
+	}
 }
 
 /**
