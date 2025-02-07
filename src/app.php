@@ -23,10 +23,8 @@ use const LFPhp\Func\EVENT_PAYLOAD_NULL;
  */
 function start_web($pre_handler = null){
 	try{
-		register_error2exception(E_ALL ^ E_NOTICE);
-		if($pre_handler){
-			call_user_func($pre_handler);
-		}
+		register_error2exception(E_ALL^E_NOTICE);
+		$pre_handler && call_user_func($pre_handler);
 		for(; ;){
 			$match_controller = null;
 			$match_action = null;
@@ -63,11 +61,11 @@ function start_web($pre_handler = null){
 				break;
 			}
 
-			//存在通配符规则
+			//router match
 			[$req_ctrl, $req_act] = explode('/', $req_route);
 			if($routes["$req_ctrl/$wildcard"]){
 				$matched_route_item = $routes["$req_ctrl/$wildcard"];
-				//命中规则存在通配符，则使用请求中的action
+				//use wild character match
 				if(strpos($matched_route_item, $wildcard) !== false){
 					$rsp_data = call_route(str_replace($wildcard, $req_act, $matched_route_item), $match_controller, $match_action);
 					break;
@@ -82,11 +80,11 @@ function start_web($pre_handler = null){
 	}catch(Exception $e){
 		try{
 			$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
-			//none exception handle, throw continue
-			if($r === EVENT_PAYLOAD_NULL){
+			if($r === EVENT_PAYLOAD_NULL){ //none exception handle, throw continue
 				throw $e;
 			}
 		}catch(Exception $e){
+			//un-handle exception
 			echo $e->getMessage();
 			error_log($e->getMessage());
 		}
