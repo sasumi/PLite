@@ -59,7 +59,9 @@ function start_web($pre_handler = null){
 				return;
 			}
 		}
-
+		if(!$response){
+			return;
+		}
 		//for text output(or no ctrl/act template)
 		if(is_string($response)){
 			echo h($response);
