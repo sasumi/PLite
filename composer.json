@@ -3,9 +3,9 @@
 	"description": "php lite web framework",
 	"type": "library",
 	"autoload": {
-		"psr-4": {
-			"LFPhp\\PLite\\": "src/"
-		}
+		"files": [
+			"autoload.php"
+		]
 	},
 	"authors": [
 		{

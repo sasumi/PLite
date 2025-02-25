@@ -3,6 +3,8 @@ namespace LFPhp\PLite;
 
 const PLITE_CORE_ROOT = __DIR__."/src";
 
+include_once __DIR__.'/vendor/autoload.php';
+
 include_once PLITE_CORE_ROOT."/app.php";
 include_once PLITE_CORE_ROOT."/config.php";
 include_once PLITE_CORE_ROOT."/defines.php";
