@@ -71,7 +71,7 @@ function page_exists($page_file){
 /**
  * include js, and patch version string
  * @param string $js_src
- * @param array $attr
+ * @param array $attr extract attributes
  * @throws \Exception
  */
 function include_js($js_src, $attr = []){
@@ -79,9 +79,20 @@ function include_js($js_src, $attr = []){
 }
 
 /**
+ * include js in type=module mode
+ * @param string $js_src
+ * @param array $attr extract attributes
+ * @throws \Exception
+ */
+function include_js_module($js_src, $attr = []){
+	$attr['type'] = 'module';
+	include_js($js_src, $attr);
+}
+
+/**
  * include css, and patch version string
  * @param string $css_href
- * @param array $attr
+ * @param array $attr extract attributes
  * @throws \Exception
  */
 function include_css($css_href, $attr = []){
@@ -91,7 +102,7 @@ function include_css($css_href, $attr = []){
 /**
  * include image, and patch version string
  * @param string $src
- * @param array $attr
+ * @param array $attr extract attributes
  * @throws \Exception
  */
 function include_img($src, $attr = []){
