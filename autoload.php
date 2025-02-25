@@ -1,17 +1,19 @@
 <?php
 namespace LFPhp\PLite;
-$source_dir = __DIR__."/src";
-include_once $source_dir."/app.php";
-include_once $source_dir."/config.php";
-include_once $source_dir."/defines.php";
-include_once $source_dir."/page.php";
-include_once $source_dir."/rewrite.php";
-include_once $source_dir."/router.php";
+const PLITE_CORE_ROOT = __DIR__."/src";
 
-spl_autoload_register(function($class) use ($source_dir){
+include_once PLITE_CORE_ROOT.'/../vendor/autoload.php';
+include_once PLITE_CORE_ROOT."/app.php";
+include_once PLITE_CORE_ROOT."/config.php";
+include_once PLITE_CORE_ROOT."/defines.php";
+include_once PLITE_CORE_ROOT."/i18n.php";
+include_once PLITE_CORE_ROOT."/page.php";
+include_once PLITE_CORE_ROOT."/rewrite.php";
+include_once PLITE_CORE_ROOT."/router.php";
+
+spl_autoload_register(function($class){
 	if(strpos($class, __NAMESPACE__) === 0){
-		$file = $source_dir.str_replace('\\', DIRECTORY_SEPARATOR, str_replace(__NAMESPACE__, '', $class)).'.php';
+		$file = PLITE_CORE_ROOT.str_replace('\\', DIRECTORY_SEPARATOR, str_replace(__NAMESPACE__, '', $class)).'.php';
 		include_once $file;
 	}
 });
-

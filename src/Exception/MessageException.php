@@ -15,7 +15,6 @@ class MessageException extends PLiteException implements JsonSerializable {
 	//default error message
 	public static $MESSAGE_DEFAULT_ERROR = 'error';
 
-	//
 	public static $CODE_SUCCESS = 0;
 	public static $CODE_ERROR = -1;
 

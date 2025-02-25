@@ -5,15 +5,7 @@
 	"autoload": {
 		"psr-4": {
 			"LFPhp\\PLite\\": "src/"
-		},
-		"files": [
-			"./src/app.php",
-			"./src/config.php",
-			"./src/defines.php",
-			"./src/page.php",
-			"./src/rewrite.php",
-			"./src/router.php"
-		]
+		}
 	},
 	"authors": [
 		{
@@ -23,6 +15,7 @@
 	],
 	"require": {
 		"ext-json": "*",
-		"lfphp/func": "^2.0"
+		"lfphp/func": "*",
+		"ext-gettext": "*"
 	}
 }
