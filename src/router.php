@@ -6,7 +6,7 @@ use ReflectionClass;
 use function LFPhp\Func\array_clean_null;
 use function LFPhp\Func\event_fire;
 use function LFPhp\Func\html_tag_hidden;
-use function LFPhp\Func\http_get_current_page_url;
+use function LFPhp\Func\http_build_query_recursive;
 use function LFPhp\Func\http_redirect;
 use function LFPhp\Func\is_url;
 
@@ -30,7 +30,7 @@ function url($uri = '', $params = [], $force_exists = false){
 		}
 	}
 	$params = array_clean_null($params);
-	$ps = $params ? '&'.http_build_query($params) : '';
+	$ps = $params ? '&'.http_build_query_recursive($params) : '';
 	$url = PLITE_SITE_ROOT."?".PLITE_ROUTER_KEY."=$uri".$ps;
 	event_fire(EVENT_ROUTER_URL, $url, $uri, $params);
 	return $url;

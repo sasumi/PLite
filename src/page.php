@@ -144,7 +144,7 @@ function patch_resource_version($resource_file){
 		}
 	}
 	if($init_result){
-		$resource_file = static_version_patch($resource_file, $matched);
+		$resource_file = static_version_patch($resource_file);
 	}
 	return $resource_file;
 }
