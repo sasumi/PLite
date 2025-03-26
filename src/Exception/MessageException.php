@@ -24,13 +24,13 @@ class MessageException extends PLiteException implements JsonSerializable {
 
 	/**
 	 * @param string $message
-	 * @param null $code
+	 * @param null $code exception code, use CODE_ERROR as default
 	 * @param null $data
 	 * @param string $forward_url
 	 * @param \Throwable|null $previous
 	 */
 	public function __construct($message = "", $code = null, $data = null, $forward_url = '', Throwable $previous = null){
-		$code = $code === null ? self::$CODE_SUCCESS : $code;
+		$code = $code === null ? self::$CODE_ERROR : $code;
 		parent::__construct($message, $code, $previous);
 		$this->data = $data;
 		$this->forward_url = $forward_url;
