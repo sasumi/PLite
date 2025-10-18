@@ -118,7 +118,7 @@ function start_web($pre_handler = null){
 	};
 
 	try{
-		register_error2exception(E_ALL^E_NOTICE);
+		register_error2exception();
 		$pre_handler && call_user_func($pre_handler);
 		for(; ;){
 			$req_route = $_GET[PLITE_ROUTER_KEY];
