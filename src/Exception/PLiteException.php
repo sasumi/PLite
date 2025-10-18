@@ -12,7 +12,7 @@ use JsonSerializable;
 class PLiteException extends Exception implements JsonSerializable {
 	public $data;
 
-	public function toArray(){
+	public function toArray() {
 		return [
 			'code'    => $this->getCode(),
 			'message' => $this->getMessage(),
@@ -22,22 +22,21 @@ class PLiteException extends Exception implements JsonSerializable {
 
 
 	// Suppress deprecation notice on PHP 8.1+ when internal interface has a return type
-	#[\ReturnTypeWillChange]
-	public function jsonSerialize(){
+	public function jsonSerialize(): mixed {
 		return $this->toArray();
 	}
 
 	/**
 	 * @return mixed
 	 */
-	public function getData(){
+	public function getData() {
 		return $this->data;
 	}
 
 	/**
 	 * @param mixed $data
 	 */
-	public function setData($data){
+	public function setData($data) {
 		$this->data = $data;
 	}
 }
