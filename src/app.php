@@ -175,11 +175,9 @@ function start_web($pre_handler = null){
 		$response_handle($rsp_data, $match_controller, $match_action);
 		event_fire(EVENT_APP_FINISHED);
 	}catch(Exception $e){
-		dump($e->getMessage());
 		try{
 			$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
 			if($r === EVENT_PAYLOAD_BREAK_NEXT){
-				dump('a', $r, 1);
 				return;
 			}
 			$exception_handle($e);
