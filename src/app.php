@@ -6,6 +6,8 @@ use Exception;
 use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\PLiteException;
 use LFPhp\PLite\Exception\RouterException;
+
+use function LFPhp\Func\dump;
 use function LFPhp\Func\event_fire;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\h;
@@ -121,7 +123,7 @@ function start_web($pre_handler = null){
 		register_error2exception();
 		$pre_handler && call_user_func($pre_handler);
 		for(; ;){
-			$req_route = $_GET[PLITE_ROUTER_KEY];
+			$req_route = $_GET[PLITE_ROUTER_KEY] ?? null;
 			$wildcard = '*';
 			$routes = get_config(PLITE_ROUTER_CONFIG_FILE);
 
@@ -173,9 +175,11 @@ function start_web($pre_handler = null){
 		$response_handle($rsp_data, $match_controller, $match_action);
 		event_fire(EVENT_APP_FINISHED);
 	}catch(Exception $e){
+		dump($e->getMessage());
 		try{
 			$r = event_fire(EVENT_APP_EXCEPTION, $e, $match_controller, $match_action);
 			if($r === EVENT_PAYLOAD_BREAK_NEXT){
+				dump('a', $r, 1);
 				return;
 			}
 			$exception_handle($e);
@@ -209,11 +213,7 @@ function set_app_env($app_env){
  * @throws \Exception
  */
 function get_app_env(){
-	$env = $_SERVER[PLITE_SERVER_APP_ENV_KEY];
-	if(!$env){
-		throw new PLiteException('no env detected:'.PLITE_SERVER_APP_ENV_KEY);
-	}
-	return $env;
+	return isset($_SERVER[PLITE_SERVER_APP_ENV_KEY]) ? $_SERVER[PLITE_SERVER_APP_ENV_KEY] : null;
 }
 
 /**

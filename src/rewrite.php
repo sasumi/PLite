@@ -50,7 +50,9 @@ function __rewrite_match_uri($uri_pattern, $uri, &$replacement = []){
  */
 function rewrite_bind_url($mapping){
 	event_register(EVENT_ROUTER_URL, function(&$url, $uri, $param) use ($mapping){
-		foreach($mapping as $url_pattern => [$uri_pattern, $param_pattern]){
+		foreach($mapping as $url_pattern => $tmp){
+			[$uri_pattern, $param_pattern] = array_pad($tmp, 2, null);
+
 			//The format is:
 			// '$1' => 'value1'
 			// '$2' => 'value2'
@@ -107,9 +109,10 @@ function rewrite_bind_url($mapping){
  */
 function rewrite_resolve_path($mapping, $path_info = null){
 	//Parse and identify the currently accessed URL
-	$path_info = $path_info === null ? $_SERVER['PATH_INFO'] : $path_info;
+	$path_info = $path_info === null ? ($_SERVER['PATH_INFO'] ?? '') : $path_info;
 	$path_info = trim($path_info, '/');
-	foreach($mapping as $url_pattern => [$uri_pattern, $param_pattern]){
+	foreach($mapping as $url_pattern => $tmp){
+		[$uri_pattern, $param_pattern] = array_pad($tmp, 2, null);
 		//hardcode URL
 		if(!preg_match_all('/{(\w+)}/', $url_pattern, $all_matches)){
 			//The current page address contains the rule address
