@@ -21,8 +21,7 @@ class PLiteException extends Exception implements JsonSerializable {
 	}
 
 
-	// Suppress deprecation notice on PHP 8.1+ when internal interface has a return type
-	public function jsonSerialize(): mixed {
+	public function jsonSerialize(): array {
 		return $this->toArray();
 	}
 
