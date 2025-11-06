@@ -150,8 +150,8 @@ function start_web($pre_handler = null){
 				}
 			}
 
-			$matched_route_item = $routes[$req_route];
-			if(isset($matched_route_item)){
+			$matched_route_item = $routes[$req_route] ?? null;
+			if($matched_route_item){
 				$rsp_data = call_route($matched_route_item, $match_controller, $match_action);
 				break;
 			}
