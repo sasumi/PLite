@@ -7,7 +7,6 @@ use LFPhp\PLite\Exception\MessageException;
 use LFPhp\PLite\Exception\PLiteException;
 use LFPhp\PLite\Exception\RouterException;
 
-use function LFPhp\Func\dump;
 use function LFPhp\Func\event_fire;
 use function LFPhp\Func\get_class_without_namespace;
 use function LFPhp\Func\h;
@@ -168,7 +167,7 @@ function start_web($pre_handler = null){
 				$rsp_data = call_route($matched_route_item, $match_controller, $match_action);
 				break;
 			}
-			throw new RouterException("Router no found");
+			throw new RouterException("Router no found: ".$req_route);
 		}
 
 		event_fire(EVENT_APP_EXECUTED, $rsp_data, $match_controller, $match_action);
