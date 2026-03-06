@@ -115,7 +115,7 @@ function start_web($pre_handler = null){
 			return true;
 		}
 
-		echo h($msg || MessageException::$MESSAGE_DEFAULT_ERROR);
+		echo h($msg ?: MessageException::$MESSAGE_DEFAULT_ERROR);
 		return true;
 	};
 
