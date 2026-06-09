@@ -11,6 +11,8 @@ use function LFPhp\Func\is_url;
 use function LFPhp\Func\static_version_patch;
 use function LFPhp\Func\static_version_set;
 
+const PAGE_INCLUDE_MAP_KEY = '__plite_page_include_map__';
+
 /**
  * Importing page templates
  * @param string $page_file
@@ -25,7 +27,7 @@ function include_page($page_file, $params = [], $as_return = false){
 		throw new PLiteException("Template no found($page_file)");
 	}
 	if(!$as_return){
-		$GLOBALS['__plite_page_include_map__'][$page_file] = true;
+		$GLOBALS[PAGE_INCLUDE_MAP_KEY][$page_file] = true;
 	}
 	if($as_return){
 		ob_start();
@@ -45,6 +47,14 @@ function include_page($page_file, $params = [], $as_return = false){
 }
 
 /**
+ * Check if the page template is being rendered
+ * @return bool
+ */
+function page_rendering(){
+	return !!$GLOBALS[PAGE_INCLUDE_MAP_KEY];
+}
+
+/**
  * Importing page templates once
  * @param string $page_file
  * @param array $params
@@ -52,7 +62,7 @@ function include_page($page_file, $params = [], $as_return = false){
  * @throws \LFPhp\PLite\Exception\PLiteException
  */
 function include_page_once($page_file, $params = []){
-	if($GLOBALS['__plite_page_include_map__'][$page_file]){
+	if($GLOBALS[PAGE_INCLUDE_MAP_KEY][$page_file]){
 		return false;
 	}
 	return include_page($page_file, $params);

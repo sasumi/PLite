@@ -96,7 +96,7 @@ function start_web($pre_handler = null){
 			return true;
 		}
 
-		if(page_exists(PLITE_PAGE_ERROR)){
+		if(page_exists(PLITE_PAGE_ERROR) && !page_rendering()){
 			include_page(PLITE_PAGE_ERROR, ['exception' => $exception]);
 			return true;
 		}
